@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcasts | TechSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        tech: {
+                            100: '#E6F7FF',
+                            200: '#BAE3FF',
+                            300: '#7CC4FA',
+                            400: '#47A3F3',
+                            500: '#2186EB', // Primary tech blue
+                            600: '#0967D2',
+                            700: '#0552B5',
+                            800: '#03449E',
+                            900: '#01337D',
+                        },
+                        dark: {
+                            800: '#1A1A1A',
+                            900: '#0D0D0D'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'wave': 'wave 1.5s linear infinite',
+                    },
+                    keyframes: {
+                        wave: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '10%': { transform: 'rotate(14deg)' },
+                            '20%': { transform: 'rotate(-8deg)' },
+                            '30%': { transform: 'rotate(14deg)' },
+                            '40%': { transform: 'rotate(-4deg)' },
+                            '50%': { transform: 'rotate(10deg)' },
+                            '60%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(0deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .podcast-card {
+            transition: all 0.3s ease;
+        }
+        .podcast-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(33, 134, 235, 0.1);
+        }
+        .dark .podcast-card:hover {
+            box-shadow: 0 10px 20px rgba(33, 134, 235, 0.2);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #2186EB;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .tag {
+            transition: all 0.2s ease;
+        }
+        .tag:hover {
+            background-color: #BAE3FF;
+        }
+        .dark .tag:hover {
+            background-color: #03449E;
+        }
+        .active-category {
+            background-color: #2186EB !important;
+            color: white !important;
+        }
+        .wave-animation {
+            animation: wave 2s linear infinite;
+        }
+        .audio-player {
+            transition: all 0.3s ease;
+        }
+        .audio-player:hover {
+            box-shadow: 0 5px 15px rgba(33, 134, 235, 0.2);
+        }
+        .progress-container {
+            height: 4px;
+            background-color: #E6F7FF;
+        }
+        .dark .progress-container {
+            background-color: #1A1A1A;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #2186EB;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        .episode-card {
+            transition: all 0.2s ease;
+        }
+        .episode-card:hover {
+            background-color: #E6F7FF;
+        }
+        .dark .episode-card:hover {
+            background-color: #1A1A1A;
+        }
+        .tooltip {
+            position: relative;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-dark-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-dark-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-laptop-code text-3xl text-tech-500"></i>
+                    <h1 class="text-2xl font-bold text-tech-600 dark:text-tech-400">TechSphere</h1>
+                </div>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="nav-link font-medium">Home</a>
+                    <a href="#" class="nav-link font-medium">Articles</a>
+                    <a href="#" class="nav-link font-medium">Dashboards</a>
+                    <a href="#" class="nav-link font-medium active">Podcasts</a>
+                    <a href="#" class="nav-link font-medium">About</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="mode-toggle p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-tech-600 dark:text-tech-400">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-2 rounded-full font-medium transition-colors">
+                        Subscribe
+                    </button>
+                    <button class="md:hidden p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Podcasts Hero -->
+    <section class="relative bg-gradient-to-r from-tech-100 to-white dark:from-tech-900 dark:to-dark-800 py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-tech-700 dark:text-tech-300">TechSphere Podcasts</h1>
+                <p class="text-xl mb-8 text-gray-700 dark:text-gray-300">Conversations with tech leaders, deep dives into emerging technologies, and analysis of industry trends.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <input type="text" placeholder="Search podcasts..." class="flex-grow max-w-md px-4 py-3 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-tech-500">
+                    <button class="bg-tech-500 hover:bg-tech-600 text-white px-6 py-3 rounded-full font-medium transition-colors whitespace-nowrap">
+                        <i class="fas fa-search mr-2"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar -->
+            <aside class="lg:w-1/4">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-700 sticky top-24">
+                    <h3 class="text-xl font-bold mb-6 text-tech-700 dark:text-tech-300 border-b border-tech-200 dark:border-tech-800 pb-3">Categories</h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg bg-tech-100 dark:bg-tech-900 text-tech-700 dark:text-tech-300 active-category">
+                                <i class="fas fa-headphones mr-2"></i> All Podcasts
+                            </button>
+                        </li>
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg hover:bg-tech-100 dark:hover:bg-tech-900 text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-microchip mr-2"></i> Emerging Tech
+                            </button>
+                        </li>
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg hover:bg-tech-100 dark:hover:bg-tech-900 text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-code mr-2"></i> Software Dev
+                            </button>
+                        </li>
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg hover:bg-tech-100 dark:hover:bg-tech-900 text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-cloud mr-2"></i> Cloud Computing
+                            </button>
+                        </li>
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg hover:bg-tech-100 dark:hover:bg-tech-900 text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-brain mr-2"></i> AI & ML
+                            </button>
+                        </li>
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg hover:bg-tech-100 dark:hover:bg-tech-900 text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-shield-alt mr-2"></i> Cybersecurity
+                            </button>
+                        </li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold mt-10 mb-6 text-tech-700 dark:text-tech-300 border-b border-tech-200 dark:border-tech-800 pb-3">Popular Tags</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="#" class="tag px-3 py-1 bg-tech-100 dark:bg-tech-900 text-tech-700 dark:text-tech-300 rounded-full text-sm">
+                            #Blockchain
+                        </a>
+                        <a href="#" class="tag px-3 py-1 bg-tech-100 dark:bg-tech-900 text-tech-700 dark:text-tech-300 rounded-full text-sm">
+                            #DevOps
+                        </a>
+                        <a href="#" class="tag px-3 py-1 bg-tech-100 dark:bg-tech-900 text-tech-700 dark:text-tech-300 rounded-full text-sm">
+                            #Quantum
+                        </a>
+                        <a href="#" class="tag px-3 py-1 bg-tech-100 dark:bg-tech-900 text-tech-700 dark:text-tech-300 rounded-full text-sm">
+                            #Startups
+                        </a>
+                        <a href="#" class="tag px-3 py-1 bg-tech-100 dark:bg-tech-900 text-tech-700 dark:text-tech-300 rounded-full text-sm">
+                            #IoT
+                        </a>
+                        <a href="#" class="tag px-3 py-1 bg-tech-100 dark:bg-tech-900 text-tech-700 dark:text-tech-300 rounded-full text-sm">
+                            #ARVR
+                        </a>
+                    </div>
+
+                    <h3 class="text-xl font-bold mt-10 mb-6 text-tech-700 dark:text-tech-300 border-b border-tech-200 dark:border-tech-800 pb-3">Top Podcasts</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-tech-500 flex items-center justify-center text-white">
+                                <span class="font-bold">1</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Future of AI</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Dr. Sarah Chen</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-tech-500 flex items-center justify-center text-white">
+                                <span class="font-bold">2</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Cloud Native</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Mark Johnson</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-tech-500 flex items-center justify-center text-white">
+                                <span class="font-bold">3</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">DevOps Unpacked</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Lisa Rodriguez</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Podcasts Content -->
+            <div class="lg:w-3/4">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold text-tech-700 dark:text-tech-300">Featured Podcasts</h2>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Sort by:</span>
+                        <select class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-tech-500">
+                            <option>Most Popular</option>
+                            <option>Recently Added</option>
+                            <option>Most Downloaded</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Featured Podcast -->
+                <div class="podcast-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700 mb-12">
+                    <div class="relative h-64 overflow-hidden bg-gradient-to-r from-tech-500 to-tech-700">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center p-8">
+                                <span class="inline-block bg-white/20 text-white px-3 py-1 rounded-full text-sm mb-4">Featured</span>
+                                <h3 class="text-3xl font-bold text-white mb-2">The Future of Quantum Computing</h3>
+                                <p class="text-white/90 mb-6">Dr. Elena Rodriguez discusses breakthroughs in quantum algorithms</p>
+                                <div class="flex justify-center space-x-4">
+                                    <button class="bg-white text-tech-600 hover:bg-tech-50 px-6 py-2 rounded-full font-medium transition-colors">
+                                        <i class="fas fa-play mr-2"></i> Play Episode
+                                    </button>
+                                    <button class="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-full font-medium transition-colors">
+                                        <i class="fas fa-info-circle mr-2"></i> Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <!-- Audio Player -->
+                        <div class="audio-player bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-3">
+                                    <button class="w-10 h-10 rounded-full bg-tech-500 text-white flex items-center justify-center hover:bg-tech-600 transition-colors">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <div>
+                                        <h4 class="font-medium">Episode 42: Quantum Breakthroughs</h4>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Dr. Elena Rodriguez</p>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400">
+                                    32:45 / 58:12
+                                </div>
+                            </div>
+                            <div class="progress-container rounded-full">
+                                <div class="progress-bar" style="width: 56%"></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <button class="text-gray-500 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                                    <i class="fas fa-step-backward"></i>
+                                </button>
+                                <button class="text-gray-500 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                                <button class="text-gray-500 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                                <button class="text-gray-500 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                                    <i class="fas fa-step-forward"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-headphones text-gray-500 dark:text-gray-400 mr-1"></i>
+                                    <span class="text-sm">1,842 listens</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-heart text-gray-500 dark:text-gray-400 mr-1"></i>
+                                    <span class="text-sm">326 likes</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-comment text-gray-500 dark:text-gray-400 mr-1"></i>
+                                    <span class="text-sm">42 comments</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="text-tech-600 dark:text-tech-400 hover:text-tech-700 dark:hover:text-tech-300">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                                <button class="text-tech-600 dark:text-tech-400 hover:text-tech-700 dark:hover:text-tech-300">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
+                                <button class="text-tech-600 dark:text-tech-400 hover:text-tech-700 dark:hover:text-tech-300">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Podcast 1 -->
+                    <div class="podcast-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                        <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="AI Podcast" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4">
+                                <span class="bg-tech-500 text-white text-xs px-3 py-1 rounded-full">AI & ML</span>
+                            </div>
+                            <button class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-tech-500 text-white flex items-center justify-center hover:bg-tech-600 transition-colors">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                <span>Released: June 10, 2023</span>
+                                <span class="mx-2">•</span>
+                                <span>58 min</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Ethics in Artificial Intelligence</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Exploring the ethical implications of AI decision-making with Prof. Michael Chen.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Host" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="text-sm">Laura Simmons</span>
+                                </div>
+                                <button class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-1 rounded-full text-sm font-medium transition-colors">
+                                    Listen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Podcast 2 -->
+                    <div class="podcast-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                        <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Cloud Podcast" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4">
+                                <span class="bg-tech-500 text-white text-xs px-3 py-1 rounded-full">Cloud</span>
+                            </div>
+                            <button class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-tech-500 text-white flex items-center justify-center hover:bg-tech-600 transition-colors">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                <span>Released: June 5, 2023</span>
+                                <span class="mx-2">•</span>
+                                <span>45 min</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Multi-Cloud Strategies</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">AWS architect David Park discusses best practices for multi-cloud environments.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Host" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="text-sm">James Wilson</span>
+                                </div>
+                                <button class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-1 rounded-full text-sm font-medium transition-colors">
+                                    Listen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Podcast 3 -->
+                    <div class="podcast-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                        <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Cybersecurity Podcast" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4">
+                                <span class="bg-tech-500 text-white text-xs px-3 py-1 rounded-full">Security</span>
+                            </div>
+                            <button class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-tech-500 text-white flex items-center justify-center hover:bg-tech-600 transition-colors">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                <span>Released: June 2, 2023</span>
+                                <span class="mx-2">•</span>
+                                <span>52 min</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Zero Trust Architecture</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Security expert Sophia Kim explains the principles of zero trust security models.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/women/23.jpg" alt="Host" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="text-sm">Sophia Kim</span>
+                                </div>
+                                <button class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-1 rounded-full text-sm font-medium transition-colors">
+                                    Listen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Podcast 4 -->
+                    <div class="podcast-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                        <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="DevOps Podcast" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4">
+                                <span class="bg-tech-500 text-white text-xs px-3 py-1 rounded-full">DevOps</span>
+                            </div>
+                            <button class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-tech-500 text-white flex items-center justify-center hover:bg-tech-600 transition-colors">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                <span>Released: May 28, 2023</span>
+                                <span class="mx-2">•</span>
+                                <span>48 min</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">CI/CD Best Practices</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Engineering lead Mark Johnson shares insights on optimizing your deployment pipeline.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="Host" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="text-sm">Mark Johnson</span>
+                                </div>
+                                <button class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-1 rounded-full text-sm font-medium transition-colors">
+                                    Listen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Episodes -->
+                <div class="mt-16">
+                    <h2 class="text-2xl font-bold mb-6 text-tech-700 dark:text-tech-300">Latest Episodes</h2>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <!-- Episode 1 -->
+                        <div class="episode-card p-4 border-b border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center space-x-4">
+                                <button class="w-12 h-12 rounded-full bg-tech-500 text-white flex items-center justify-center hover:bg-tech-600 transition-colors">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-lg font-bold truncate">The State of Web3 in 2023</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Blockchain expert Alex Turner discusses the current landscape</p>
+                                </div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                    42 min
+                                </div>
+                                <button class="text-gray-500 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400 ml-4">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Episode 2 -->
+                        <div class="episode-card p-4 border-b border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center space-x-4">
+                                <button class="w-12 h-12 rounded-full bg-tech-500 text-white flex items-center justify-center hover:bg-tech-600 transition-colors">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-lg font-bold truncate">Building Resilient Microservices</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Architect Sarah Williams on fault tolerance patterns</p>
+                                </div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                    38 min
+                                </div>
+                                <button class="text-gray-500 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400 ml-4">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Episode 3 -->
+                        <div class="episode-card p-4 border-b border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center space-x-4">
+                                <button class="w-12 h-12 rounded-full bg-tech-500 text-white flex items-center justify-center hover:bg-tech-600 transition-colors">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-lg font-bold truncate">The Future of Remote Work Tech</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Product lead David Kim on collaboration tools evolution</p>
+                                </div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                    45 min
+                                </div>
+                                <button class="text-gray-500 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400 ml-4">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Episode 4 -->
+                        <div class="episode-card p-4">
+                            <div class="flex items-center space-x-4">
+                                <button class="w-12 h-12 rounded-full bg-tech-500 text-white flex items-center justify-center hover:bg-tech-600 transition-colors">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-lg font-bold truncate">Low-Code/No-Code Revolution</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">CTO Maria Gonzalez on empowering citizen developers</p>
+                                </div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                    51 min
+                                </div>
+                                <button class="text-gray-500 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400 ml-4">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular Hosts -->
+                <div class="mt-16">
+                    <h2 class="text-2xl font-bold mb-6 text-tech-700 dark:text-tech-300">Popular Hosts</h2>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <!-- Host 1 -->
+                        <div class="text-center">
+                            <div class="w-24 h-24 rounded-full bg-gradient-to-r from-tech-400 to-tech-600 mx-auto mb-3 p-1">
+                                <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Host" class="w-full h-full rounded-full object-cover border-2 border-white">
+                            </div>
+                            <h3 class="font-bold">Dr. Sarah Chen</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">AI Researcher</p>
+                            <div class="flex justify-center space-x-2 mt-2">
+                                <button class="text-tech-500 hover:text-tech-600">
+                                    <i class="fab fa-twitter"></i>
+                                </button>
+                                <button class="text-tech-500 hover:text-tech-600">
+                                    <i class="fab fa-linkedin"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Host 2 -->
+                        <div class="text-center">
+                            <div class="w-24 h-24 rounded-full bg-gradient-to-r from-tech-400 to-tech-600 mx-auto mb-3 p-1">
+                                <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="Host" class="w-full h-full rounded-full object-cover border-2 border-white">
+                            </div>
+                            <h3 class="font-bold">Mark Johnson</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Cloud Architect</p>
+                            <div class="flex justify-center space-x-2 mt-2">
+                                <button class="text-tech-500 hover:text-tech-600">
+                                    <i class="fab fa-twitter"></i>
+                                </button>
+                                <button class="text-tech-500 hover:text-tech-600">
+                                    <i class="fab fa-linkedin"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Host 3 -->
+                        <div class="text-center">
+                            <div class="w-24 h-24 rounded-full bg-gradient-to-r from-tech-400 to-tech-600 mx-auto mb-3 p-1">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Host" class="w-full h-full rounded-full object-cover border-2 border-white">
+                            </div>
+                            <h3 class="font-bold">Lisa Rodriguez</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">DevOps Engineer</p>
+                            <div class="flex justify-center space-x-2 mt-2">
+                                <button class="text-tech-500 hover:text-tech-600">
+                                    <i class="fab fa-twitter"></i>
+                                </button>
+                                <button class="text-tech-500 hover:text-tech-600">
+                                    <i class="fab fa-linkedin"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Host 4 -->
+                        <div class="text-center">
+                            <div class="w-24 h-24 rounded-full bg-gradient-to-r from-tech-400 to-tech-600 mx-auto mb-3 p-1">
+                                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Host" class="w-full h-full rounded-full object-cover border-2 border-white">
+                            </div>
+                            <h3 class="font-bold">David Park</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Security Expert</p>
+                            <div class="flex justify-center space-x-2 mt-2">
+                                <button class="text-tech-500 hover:text-tech-600">
+                                    <i class="fab fa-twitter"></i>
+                                </button>
+                                <button class="text-tech-500 hover:text-tech-600">
+                                    <i class="fab fa-linkedin"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex justify-center mt-12">
+                    <nav class="flex items-center space-x-2">
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-tech-500 text-white">
+                            1
+                        </button>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            2
+                        </button>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            3
+                        </button>
+                        <span class="px-2">...</span>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            8
+                        </button>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Podcast Platforms Section -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">Listen On Your Favorite Platform</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">TechSphere podcasts are available on all major podcast platforms.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                <!-- Platform 1 -->
+                <a href="#" class="bg-white dark:bg-gray-700 rounded-xl shadow-sm p-6 flex items-center justify-center hover:shadow-md transition-shadow">
+                    <i class="fab fa-spotify text-4xl text-green-500"></i>
+                </a>
+                
+                <!-- Platform 2 -->
+                <a href="#" class="bg-white dark:bg-gray-700 rounded-xl shadow-sm p-6 flex items-center justify-center hover:shadow-md transition-shadow">
+                    <i class="fab fa-apple text-4xl text-gray-800 dark:text-gray-200"></i>
+                </a>
+                
+                <!-- Platform 3 -->
+                <a href="#" class="bg-white dark:bg-gray-700 rounded-xl shadow-sm p-6 flex items-center justify-center hover:shadow-md transition-shadow">
+                    <i class="fab fa-google text-4xl text-blue-500"></i>
+                </a>
+                
+                <!-- Platform 4 -->
+                <a href="#" class="bg-white dark:bg-gray-700 rounded-xl shadow-sm p-6 flex items-center justify-center hover:shadow-md transition-shadow">
+                    <i class="fab fa-youtube text-4xl text-red-500"></i>
+                </a>
+                
+                <!-- Platform 5 -->
+                <a href="#" class="bg-white dark:bg-gray-700 rounded-xl shadow-sm p-6 flex items-center justify-center hover:shadow-md transition-shadow">
+                    <i class="fab fa-soundcloud text-4xl text-orange-500"></i>
+                </a>
+                
+                <!-- Platform 6 -->
+                <a href="#" class="bg-white dark:bg-gray-700 rounded-xl shadow-sm p-6 flex items-center justify-center hover:shadow-md transition-shadow">
+                    <i class="fas fa-podcast text-4xl text-purple-500"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-tech-50 dark:bg-tech-900">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="inline-block bg-tech-100 dark:bg-tech-800 text-tech-700 dark:text-tech-300 px-4 py-2 rounded-full mb-4">
+                    <i class="fas fa-envelope mr-2"></i> Stay Updated
+                </div>
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">Subscribe to Our Podcast Newsletter</h2>
+                <p class="text-lg mb-8 text-tech-600 dark:text-tech-400">Get the latest episodes, tech insights, and exclusive content delivered to your inbox.</p>
+                <form class="flex flex-col sm:flex-row justify-center gap-4">
+                    <input type="email" placeholder="Your email address" class="flex-grow max-w-md px-4 py-3 rounded-full border border-tech-300 dark:border-tech-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-tech-500">
+                    <button class="bg-tech-600 hover:bg-tech-700 text-white px-6 py-3 rounded-full font-medium transition-colors whitespace-nowrap">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="text-sm mt-4 text-tech-500 dark:text-tech-300">We respect your privacy. Unsubscribe at any time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-800 pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-laptop-code text-2xl text-tech-500"></i>
+                        <h3 class="text-xl font-bold text-tech-600 dark:text-tech-400">TechSphere</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Exploring the intersection of technology, innovation, and culture through podcasts.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Podcasts</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">All Episodes</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Featured</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Categories</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Hosts</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Transcripts</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">About</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Careers</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Subscribe</h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Get the latest episodes and tech insights delivered to your inbox.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-tech-500 w-full">
+                        <button class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-2 rounded-r-full">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 dark:border-gray-700 mt-12 pt-8 text-center text-gray-500 dark:text-gray-400">
+                <p>© 2023 TechSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        // Category selection
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active-category', 'bg-tech-100', 'dark:bg-tech-900', 'text-tech-700', 'dark:text-tech-300'));
+                btn.classList.add('active-category', 'bg-tech-100', 'dark:bg-tech-900', 'text-tech-700', 'dark:text-tech-300');
+            });
+        });
+
+        // Audio player simulation
+        const playButtons = document.querySelectorAll('[data-play]');
+        playButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // In a real implementation, this would play the audio
+                const player = button.closest('.audio-player');
+                const playIcon = button.querySelector('i');
+                
+                if (playIcon.classList.contains('fa-play')) {
+                    playIcon.classList.remove('fa-play');
+                    playIcon.classList.add('fa-pause');
+                    player.querySelector('.progress-bar').style.width = '56%';
+                } else {
+                    playIcon.classList.remove('fa-pause');
+                    playIcon.classList.add('fa-play');
+                }
+            });
+        });
+
+        // Tooltip functionality
+        const tooltips = document.querySelectorAll('.tooltip');
+        tooltips.forEach(tooltip => {
+            tooltip.addEventListener('mouseenter', () => {
+                const tooltipText = tooltip.querySelector('.tooltip-text');
+                tooltipText.style.visibility = 'visible';
+                tooltipText.style.opacity = '1';
+            });
+            tooltip.addEventListener('mouseleave', () => {
+                const tooltipText = tooltip.querySelector('.tooltip-text');
+                tooltipText.style.visibility = 'hidden';
+                tooltipText.style.opacity = '0';
+            });
+        });
+    </script>
+</body>
+</html>
