@@ -3,6 +3,8 @@
 
 Welcome to the official repository for **TechSphere** — your gateway to exploring the intersection of **technology**, **innovation**, and **culture**. From deep-dive articles and podcasts to real-time dashboards and premium insights, TechSphere is designed to **empower the tech community** through engaging content and data-driven storytelling.
 
+![TechSphere Website](https://github.com/Willie-Conway/TechSphere/blob/34bf58762122c945dd084790543b9723c4d84ae0/TechSphere_Home.png)
+
 ---
 
 ## 🚀 Overview
