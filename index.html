@@ -3,25 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechLumin | Data & Software Culture</title>
+    <title>TechSphere | Data & Software Culture</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         gold: {
-                            50: '#FFFDF5',
                             100: '#FFF9E6',
                             200: '#FFEEB8',
                             300: '#FFE38A',
                             400: '#FFD85C',
-                            500: '#FFD12E',
-                            600: '#E5BC29',
-                            700: '#CCA724',
-                            800: '#B2921F',
-                            900: '#997D1A',
+                            500: '#FFD700', // Primary gold
+                            600: '#CCAC00',
+                            700: '#998100',
+                            800: '#665600',
+                            900: '#332B00',
+                        },
+                        dark: {
+                            800: '#1A1A1A',
+                            900: '#0D0D0D'
                         }
                     }
                 }
@@ -29,1034 +33,555 @@
         }
     </script>
     <style>
-        .dark {
-            --tw-bg-opacity: 1;
-            background-color: rgb(15 23 42 / var(--tw-bg-opacity));
-            color: white;
+        .dashboard-card {
+            transition: all 0.3s ease;
         }
-        
-        .dark .bg-white {
-            background-color: #1e293b !important;
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        
-        .dark .text-gray-800 {
-            color: #e2e8f0 !important;
+        .dark .dashboard-card:hover {
+            box-shadow: 0 10px 20px rgba(255,215,0,0.1);
         }
-        
-        .dark .border-gray-200 {
-            border-color: #334155 !important;
+        .article-card {
+            transition: all 0.3s ease;
         }
-        
+        .article-card:hover {
+            transform: translateY(-3px);
+        }
         .chart-container {
-            position: relative;
             height: 300px;
             width: 100%;
         }
-        
-        .post-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(255, 209, 46, 0.4);
+        #techTrendsChart, #languagePopularityChart {
+            width: 100% !important;
+            height: 100% !important;
         }
-        
-        .gold-gradient {
-            background: linear-gradient(135deg, #FFD12E 0%, #997D1A 100%);
+        .mode-toggle {
+            transition: all 0.3s ease;
         }
-        
-        .animated-underline {
+        .mode-toggle:hover {
+            transform: scale(1.1);
+        }
+        .nav-link {
             position: relative;
-            display: inline-block;
         }
-        
-        .animated-underline::after {
+        .nav-link::after {
             content: '';
             position: absolute;
             width: 0;
             height: 2px;
             bottom: -2px;
             left: 0;
-            background-color: #FFD12E;
+            background-color: #FFD700;
             transition: width 0.3s ease;
         }
-        
-        .animated-underline:hover::after {
+        .nav-link:hover::after {
             width: 100%;
         }
-        
-        .toggle-checkbox:checked {
-            right: 0;
-            background-color: #FFD12E;
+        .tag {
+            transition: all 0.2s ease;
         }
-        
-        .toggle-checkbox:checked + .toggle-label {
-            background-color: #1e293b;
+        .tag:hover {
+            background-color: #FFEEB8;
         }
-        
-        .page {
-            display: none;
-        }
-        
-        .page.active {
-            display: block;
-        }
-        
-        .auth-form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        
-        .profile-avatar {
-            width: 120px;
-            height: 120px;
-        }
-        
-        .dashboard-card {
-            transition: all 0.3s ease;
-        }
-        
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(255, 209, 46, 0.2);
-        }
-        
-        .editor-toolbar {
-            border: 1px solid #e2e8f0;
-            border-radius: 0.375rem 0.375rem 0 0;
-        }
-        
-        .editor-content {
-            border: 1px solid #e2e8f0;
-            border-top: none;
-            border-radius: 0 0 0.375rem 0.375rem;
-            min-height: 200px;
-            padding: 1rem;
-        }
-        
-        .dark .editor-toolbar,
-        .dark .editor-content {
-            border-color: #334155;
-            background-color: #1e293b;
-            color: white;
+        .dark .tag:hover {
+            background-color: #665600;
         }
     </style>
 </head>
-<body class="bg-white transition-colors duration-300">
+<body class="bg-white dark:bg-dark-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-white shadow-sm dark:bg-slate-800 transition-colors duration-300">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-2 cursor-pointer" onclick="showPage('home')">
-                <div class="gold-gradient w-8 h-8 rounded-full flex items-center justify-center">
-                    <i class="fas fa-lightbulb text-white"></i>
-                </div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Tech<span class="text-gold-500">Lumin</span></h1>
-            </div>
-            
-            <nav class="hidden md:flex space-x-8">
-                <a href="#" class="animated-underline text-gray-800 dark:text-white hover:text-gold-500 font-medium" onclick="showPage('home')">Home</a>
-                <a href="#" class="animated-underline text-gray-800 dark:text-white hover:text-gold-500 font-medium" onclick="showPage('articles')">Articles</a>
-                <a href="#" class="animated-underline text-gray-800 dark:text-white hover:text-gold-500 font-medium" onclick="showPage('dashboards')">Dashboards</a>
-                <a href="#" class="animated-underline text-gray-800 dark:text-white hover:text-gold-500 font-medium" onclick="showPage('topics')">Topics</a>
-                <a href="#" class="animated-underline text-gray-800 dark:text-white hover:text-gold-500 font-medium" id="profileLink" style="display: none;" onclick="showPage('profile')">Profile</a>
-            </nav>
-            
-            <div class="flex items-center space-x-4">
-                <div class="relative inline-block w-12 mr-2 align-middle select-none">
-                    <input type="checkbox" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-                    <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-dark-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-laptop-code text-3xl text-gold-500"></i>
+                    <h1 class="text-2xl font-bold text-gold-600 dark:text-gold-400">TechSphere</h1>
                 </div>
                 
-                <div id="authButtons">
-                    <button class="bg-gold-500 hover:bg-gold-600 text-white font-bold py-2 px-4 rounded-full transition duration-300" onclick="showPage('login')">
-                        Login
-                    </button>
-                    <button class="border-2 border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-white font-bold py-2 px-4 rounded-full transition duration-300" onclick="showPage('register')">
-                        Register
-                    </button>
-                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="nav-link font-medium">Home</a>
+                    <a href="#" class="nav-link font-medium">Articles</a>
+                    <a href="#" class="nav-link font-medium">Dashboards</a>
+                    <a href="#" class="nav-link font-medium">Podcasts</a>
+                    <a href="#" class="nav-link font-medium">About</a>
+                </nav>
                 
-                <div id="userMenu" class="hidden">
-                    <div class="relative">
-                        <button id="userButton" class="flex items-center space-x-2 focus:outline-none">
-                            <div class="w-8 h-8 rounded-full bg-gold-500 flex items-center justify-center text-white">
-                                <span id="userInitial">U</span>
-                            </div>
-                            <i class="fas fa-chevron-down text-gray-600 dark:text-gray-300 text-xs"></i>
-                        </button>
-                        <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-700 rounded-md shadow-lg z-50">
-                            <a href="#" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-gold-100 dark:hover:bg-slate-600" onclick="showPage('profile')">Profile</a>
-                            <a href="#" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-gold-100 dark:hover:bg-slate-600" onclick="showPage('dashboard')">Dashboard</a>
-                            <a href="#" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-gold-100 dark:hover:bg-slate-600" onclick="logout()">Logout</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="md:hidden text-gray-800 dark:text-white" id="mobileMenuButton">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-            </div>
-        </div>
-        
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-slate-800 px-4 py-2 border-t border-gray-200 dark:border-slate-700">
-            <div class="flex flex-col space-y-3">
-                <a href="#" class="text-gray-800 dark:text-white hover:text-gold-500" onclick="showPage('home')">Home</a>
-                <a href="#" class="text-gray-800 dark:text-white hover:text-gold-500" onclick="showPage('articles')">Articles</a>
-                <a href="#" class="text-gray-800 dark:text-white hover:text-gold-500" onclick="showPage('dashboards')">Dashboards</a>
-                <a href="#" class="text-gray-800 dark:text-white hover:text-gold-500" onclick="showPage('topics')">Topics</a>
-                <a href="#" class="text-gray-800 dark:text-white hover:text-gold-500" id="mobileProfileLink" style="display: none;" onclick="showPage('profile')">Profile</a>
-                <div class="border-t border-gray-200 dark:border-slate-700 pt-2" id="mobileAuthButtons">
-                    <button class="w-full bg-gold-500 hover:bg-gold-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 mb-2" onclick="showPage('login')">
-                        Login
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="mode-toggle p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gold-600 dark:text-gold-400">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
                     </button>
-                    <button class="w-full border-2 border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-white font-bold py-2 px-4 rounded-full transition duration-300" onclick="showPage('register')">
-                        Register
+                    <button class="bg-gold-500 hover:bg-gold-600 text-white px-4 py-2 rounded-full font-medium transition-colors">
+                        Subscribe
                     </button>
-                </div>
-                <div class="border-t border-gray-200 dark:border-slate-700 pt-2 hidden" id="mobileUserMenu">
-                    <a href="#" class="block py-2 text-gray-800 dark:text-white hover:text-gold-500" onclick="showPage('profile')">Profile</a>
-                    <a href="#" class="block py-2 text-gray-800 dark:text-white hover:text-gold-500" onclick="showPage('dashboard')">Dashboard</a>
-                    <a href="#" class="block py-2 text-gray-800 dark:text-white hover:text-gold-500" onclick="logout()">Logout</a>
+                    <button class="md:hidden p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="min-h-screen">
-        <!-- Home Page -->
-        <div id="home" class="page active">
-            <!-- Hero Section -->
-            <section class="relative bg-gradient-to-r from-gold-100 to-white dark:from-slate-800 dark:to-slate-900 py-20">
-                <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
-                    <div class="md:w-1/2 mb-10 md:mb-0">
-                        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">Illuminating the <span class="text-gold-500">Future</span> of Tech</h1>
-                        <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">Exploring data culture, software engineering practices, and emerging technologies that shape our digital world.</p>
-                        <div class="flex space-x-4">
-                            <button class="bg-gold-500 hover:bg-gold-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 transform hover:scale-105" onclick="showPage('articles')">
-                                Explore Articles
-                            </button>
-                            <button class="border-2 border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-white font-bold py-3 px-6 rounded-full transition duration-300 transform hover:scale-105" onclick="showPage('register')">
-                                Subscribe
-                            </button>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2 flex justify-center">
-                        <div class="relative w-full max-w-md">
-                            <div class="absolute -top-6 -left-6 w-32 h-32 bg-gold-200 rounded-full opacity-70 animate-pulse"></div>
-                            <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-gold-300 rounded-full opacity-70 animate-pulse delay-300"></div>
-                            <div class="relative bg-white dark:bg-slate-700 p-6 rounded-xl shadow-xl">
-                                <div class="flex justify-between items-center mb-4">
-                                    <h3 class="font-bold text-gray-800 dark:text-white">Tech Trends Dashboard</h3>
-                                    <span class="text-xs bg-gold-100 dark:bg-gold-900 text-gold-800 dark:text-gold-200 px-2 py-1 rounded-full">Live Data</span>
-                                </div>
-                                <div class="chart-container">
-                                    <canvas id="trendChart"></canvas>
-                                </div>
-                                <div class="flex justify-between mt-4">
-                                    <div class="text-center">
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">AI Adoption</p>
-                                        <p class="text-lg font-bold text-gold-500">72%</p>
-                                    </div>
-                                    <div class="text-center">
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Data Teams</p>
-                                        <p class="text-lg font-bold text-gold-500">58%</p>
-                                    </div>
-                                    <div class="text-center">
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Cloud Native</p>
-                                        <p class="text-lg font-bold text-gold-500">64%</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-r from-gold-100 to-white dark:from-gold-900 dark:to-dark-800 py-20">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gold-700 dark:text-gold-300">Exploring the Intersection of <span class="underline decoration-gold-500">Data</span> & <span class="underline decoration-gold-500">Software</span> Culture</h1>
+                <p class="text-xl mb-8 text-gray-700 dark:text-gray-300">Insights, analysis and commentary on technology trends, engineering practices, and the evolving digital landscape.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <input type="text" placeholder="Search articles..." class="flex-grow max-w-md px-4 py-3 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gold-500">
+                    <button class="bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-full font-medium transition-colors whitespace-nowrap">
+                        <i class="fas fa-search mr-2"></i> Search
+                    </button>
                 </div>
-            </section>
-
-            <!-- Featured Posts -->
-            <section class="py-16 bg-gold-50 dark:bg-slate-800">
-                <div class="container mx-auto px-4">
-                    <div class="flex justify-between items-center mb-12">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Featured <span class="text-gold-500">Articles</span></h2>
-                        <a href="#" class="flex items-center text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('articles')">
-                            View All <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Post 1 -->
-                        <div class="bg-white dark:bg-slate-700 rounded-xl overflow-hidden shadow-md post-card transition duration-300">
-                            <div class="relative h-48 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                                     alt="Data Visualization" class="w-full h-full object-cover">
-                                <div class="absolute top-4 right-4 bg-gold-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                    Data Culture
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                                    <span>June 15, 2023</span>
-                                    <span class="mx-2">•</span>
-                                    <span>8 min read</span>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Building a Data-Driven Culture in Your Organization</h3>
-                                <p class="text-gray-600 dark:text-gray-300 mb-4">Explore strategies to foster data literacy and make evidence-based decision making the norm across all teams.</p>
-                                <div class="flex justify-between items-center">
-                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('article')">Read More</a>
-                                    <div class="flex space-x-2">
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-bookmark"></i>
-                                        </button>
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-share-square"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Post 2 -->
-                        <div class="bg-white dark:bg-slate-700 rounded-xl overflow-hidden shadow-md post-card transition duration-300">
-                            <div class="relative h-48 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1617791160536-598cf32026fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80" 
-                                     alt="Software Development" class="w-full h-full object-cover">
-                                <div class="absolute top-4 right-4 bg-gold-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                    Software
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                                    <span>June 8, 2023</span>
-                                    <span class="mx-2">•</span>
-                                    <span>6 min read</span>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">The Evolution of DevOps: What's Next in 2023</h3>
-                                <p class="text-gray-600 dark:text-gray-300 mb-4">How platform engineering and AI are reshaping the DevOps landscape and what it means for engineering teams.</p>
-                                <div class="flex justify-between items-center">
-                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('article')">Read More</a>
-                                    <div class="flex space-x-2">
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-bookmark"></i>
-                                        </button>
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-share-square"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Post 3 -->
-                        <div class="bg-white dark:bg-slate-700 rounded-xl overflow-hidden shadow-md post-card transition duration-300">
-                            <div class="relative h-48 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80" 
-                                     alt="AI Technology" class="w-full h-full object-cover">
-                                <div class="absolute top-4 right-4 bg-gold-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                    Emerging Tech
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                                    <span>June 1, 2023</span>
-                                    <span class="mx-2">•</span>
-                                    <span>10 min read</span>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Generative AI in Enterprise: Beyond the Hype</h3>
-                                <p class="text-gray-600 dark:text-gray-300 mb-4">Practical applications of large language models in business operations and the ethical considerations companies must address.</p>
-                                <div class="flex justify-between items-center">
-                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('article')">Read More</a>
-                                    <div class="flex space-x-2">
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-bookmark"></i>
-                                        </button>
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-share-square"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Popular Topics -->
-            <section class="py-16 bg-white dark:bg-slate-900">
-                <div class="container mx-auto px-4">
-                    <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Browse by <span class="text-gold-500">Topics</span></h2>
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                        <a href="#" class="bg-white dark:bg-slate-700 rounded-xl p-6 text-center shadow-md hover:shadow-lg transition duration-300 group" onclick="showPage('topic')">
-                            <div class="w-16 h-16 bg-gold-100 dark:bg-gold-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-gold-200 dark:group-hover:bg-gold-800 transition duration-300">
-                                <i class="fas fa-database text-gold-500 text-2xl"></i>
-                            </div>
-                            <h3 class="font-bold text-gray-800 dark:text-white group-hover:text-gold-500 transition duration-300">Data Engineering</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">12 Articles</p>
-                        </a>
-                        
-                        <a href="#" class="bg-white dark:bg-slate-700 rounded-xl p-6 text-center shadow-md hover:shadow-lg transition duration-300 group" onclick="showPage('topic')">
-                            <div class="w-16 h-16 bg-gold-100 dark:bg-gold-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-gold-200 dark:group-hover:bg-gold-800 transition duration-300">
-                                <i class="fas fa-brain text-gold-500 text-2xl"></i>
-                            </div>
-                            <h3 class="font-bold text-gray-800 dark:text-white group-hover:text-gold-500 transition duration-300">AI/ML</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">18 Articles</p>
-                        </a>
-                        
-                        <a href="#" class="bg-white dark:bg-slate-700 rounded-xl p-6 text-center shadow-md hover:shadow-lg transition duration-300 group" onclick="showPage('topic')">
-                            <div class="w-16 h-16 bg-gold-100 dark:bg-gold-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-gold-200 dark:group-hover:bg-gold-800 transition duration-300">
-                                <i class="fas fa-cloud text-gold-500 text-2xl"></i>
-                            </div>
-                            <h3 class="font-bold text-gray-800 dark:text-white group-hover:text-gold-500 transition duration-300">Cloud Computing</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">15 Articles</p>
-                        </a>
-                        
-                        <a href="#" class="bg-white dark:bg-slate-700 rounded-xl p-6 text-center shadow-md hover:shadow-lg transition duration-300 group" onclick="showPage('topic')">
-                            <div class="w-16 h-16 bg-gold-100 dark:bg-gold-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-gold-200 dark:group-hover:bg-gold-800 transition duration-300">
-                                <i class="fas fa-code text-gold-500 text-2xl"></i>
-                            </div>
-                            <h3 class="font-bold text-gray-800 dark:text-white group-hover:text-gold-500 transition duration-300">Software Dev</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">22 Articles</p>
-                        </a>
-                        
-                        <a href="#" class="bg-white dark:bg-slate-700 rounded-xl p-6 text-center shadow-md hover:shadow-lg transition duration-300 group" onclick="showPage('topic')">
-                            <div class="w-16 h-16 bg-gold-100 dark:bg-gold-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-gold-200 dark:group-hover:bg-gold-800 transition duration-300">
-                                <i class="fas fa-shield-alt text-gold-500 text-2xl"></i>
-                            </div>
-                            <h3 class="font-bold text-gray-800 dark:text-white group-hover:text-gold-500 transition duration-300">Cybersecurity</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">9 Articles</p>
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Testimonials -->
-            <section class="py-16 bg-gold-50 dark:bg-slate-800">
-                <div class="container mx-auto px-4">
-                    <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">What Our <span class="text-gold-500">Readers</span> Say</h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="bg-white dark:bg-slate-700 rounded-xl p-8 shadow-md">
-                            <div class="flex items-center mb-4">
-                                <div class="w-12 h-12 rounded-full bg-gold-200 dark:bg-gold-900 flex items-center justify-center text-gold-600 dark:text-gold-300 font-bold text-xl mr-4">
-                                    JD
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 dark:text-white">Jane Doe</h4>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Data Scientist</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-600 dark:text-gray-300 italic">"TechLumin's articles on data culture transformed how our organization approaches analytics. The practical advice is unmatched in the industry."</p>
-                            <div class="flex mt-4 text-gold-500">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white dark:bg-slate-700 rounded-xl p-8 shadow-md">
-                            <div class="flex items-center mb-4">
-                                <div class="w-12 h-12 rounded-full bg-gold-200 dark:bg-gold-900 flex items-center justify-center text-gold-600 dark:text-gold-300 font-bold text-xl mr-4">
-                                    JS
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 dark:text-white">John Smith</h4>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">CTO</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-600 dark:text-gray-300 italic">"The software engineering insights have helped us optimize our development processes. I share articles with my team weekly."</p>
-                            <div class="flex mt-4 text-gold-500">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white dark:bg-slate-700 rounded-xl p-8 shadow-md">
-                            <div class="flex items-center mb-4">
-                                <div class="w-12 h-12 rounded-full bg-gold-200 dark:bg-gold-900 flex items-center justify-center text-gold-600 dark:text-gold-300 font-bold text-xl mr-4">
-                                    AR
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 dark:text-white">Alex Rivera</h4>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Product Manager</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-600 dark:text-gray-300 italic">"The emerging tech coverage helps me stay ahead of trends that could impact our product roadmap. Essential reading for tech leaders."</p>
-                            <div class="flex mt-4 text-gold-500">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            </div>
         </div>
+    </section>
 
-        <!-- Articles Page -->
-        <div id="articles" class="page">
-            <section class="py-16 bg-white dark:bg-slate-900">
-                <div class="container mx-auto px-4">
-                    <div class="flex justify-between items-center mb-12">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">All <span class="text-gold-500">Articles</span></h2>
-                        <div class="flex items-center space-x-4">
-                            <div class="relative">
-                                <select class="appearance-none bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-full py-2 pl-4 pr-8 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500">
-                                    <option>Latest</option>
-                                    <option>Popular</option>
-                                    <option>Top Rated</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <i class="fas fa-chevron-down text-gray-500 dark:text-gray-400"></i>
-                                </div>
-                            </div>
-                            <button id="newArticleBtn" class="bg-gold-500 hover:bg-gold-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 hidden" onclick="showPage('new-article')">
-                                <i class="fas fa-plus mr-2"></i> New Article
-                            </button>
+    <!-- Featured Articles -->
+    <section class="py-16 bg-white dark:bg-dark-900">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl font-bold text-gold-700 dark:text-gold-300">Featured Articles</h2>
+                <a href="#" class="text-gold-600 dark:text-gold-400 hover:underline flex items-center">
+                    View all <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Article 1 -->
+                <div class="article-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Data Engineering" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-gold-500 text-white text-xs px-3 py-1 rounded-full">Data</span>
                         </div>
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-                        <!-- Repeat article cards here -->
-                        <!-- Article 1 -->
-                        <div class="bg-white dark:bg-slate-700 rounded-xl overflow-hidden shadow-md post-card transition duration-300">
-                            <div class="relative h-48 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                                     alt="Data Visualization" class="w-full h-full object-cover">
-                                <div class="absolute top-4 right-4 bg-gold-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                    Data Culture
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                                    <span>June 15, 2023</span>
-                                    <span class="mx-2">•</span>
-                                    <span>8 min read</span>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Building a Data-Driven Culture in Your Organization</h3>
-                                <p class="text-gray-600 dark:text-gray-300 mb-4">Explore strategies to foster data literacy and make evidence-based decision making the norm across all teams.</p>
-                                <div class="flex justify-between items-center">
-                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('article')">Read More</a>
-                                    <div class="flex space-x-2">
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-bookmark"></i>
-                                        </button>
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-share-square"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                            <span>June 15, 2023</span>
+                            <span class="mx-2">•</span>
+                            <span>8 min read</span>
                         </div>
-                        
-                        <!-- Article 2 -->
-                        <div class="bg-white dark:bg-slate-700 rounded-xl overflow-hidden shadow-md post-card transition duration-300">
-                            <div class="relative h-48 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1617791160536-598cf32026fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80" 
-                                     alt="Software Development" class="w-full h-full object-cover">
-                                <div class="absolute top-4 right-4 bg-gold-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                    Software
-                                </div>
+                        <h3 class="text-xl font-bold mb-3">The Future of Data Engineering in 2024</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Exploring the emerging trends and technologies that will shape data engineering practices in the coming year.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
+                                <span class="text-sm">Sarah Johnson</span>
                             </div>
-                            <div class="p-6">
-                                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                                    <span>June 8, 2023</span>
-                                    <span class="mx-2">•</span>
-                                    <span>6 min read</span>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">The Evolution of DevOps: What's Next in 2023</h3>
-                                <p class="text-gray-600 dark:text-gray-300 mb-4">How platform engineering and AI are reshaping the DevOps landscape and what it means for engineering teams.</p>
-                                <div class="flex justify-between items-center">
-                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('article')">Read More</a>
-                                    <div class="flex space-x-2">
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-bookmark"></i>
-                                        </button>
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-share-square"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Article 3 -->
-                        <div class="bg-white dark:bg-slate-700 rounded-xl overflow-hidden shadow-md post-card transition duration-300">
-                            <div class="relative h-48 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80" 
-                                     alt="AI Technology" class="w-full h-full object-cover">
-                                <div class="absolute top-4 right-4 bg-gold-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                    Emerging Tech
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                                    <span>June 1, 2023</span>
-                                    <span class="mx-2">•</span>
-                                    <span>10 min read</span>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Generative AI in Enterprise: Beyond the Hype</h3>
-                                <p class="text-gray-600 dark:text-gray-300 mb-4">Practical applications of large language models in business operations and the ethical considerations companies must address.</p>
-                                <div class="flex justify-between items-center">
-                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('article')">Read More</a>
-                                    <div class="flex space-x-2">
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-bookmark"></i>
-                                        </button>
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-share-square"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Article 4 -->
-                        <div class="bg-white dark:bg-slate-700 rounded-xl overflow-hidden shadow-md post-card transition duration-300">
-                            <div class="relative h-48 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1555774698-0f77b0d5c7a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                                     alt="Cloud Computing" class="w-full h-full object-cover">
-                                <div class="absolute top-4 right-4 bg-gold-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                    Cloud
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                                    <span>May 25, 2023</span>
-                                    <span class="mx-2">•</span>
-                                    <span>7 min read</span>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Multi-Cloud Strategies for Enterprise Resilience</h3>
-                                <p class="text-gray-600 dark:text-gray-300 mb-4">How leading companies are leveraging multiple cloud providers to optimize costs and improve reliability.</p>
-                                <div class="flex justify-between items-center">
-                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('article')">Read More</a>
-                                    <div class="flex space-x-2">
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-bookmark"></i>
-                                        </button>
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-share-square"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Article 5 -->
-                        <div class="bg-white dark:bg-slate-700 rounded-xl overflow-hidden shadow-md post-card transition duration-300">
-                            <div class="relative h-48 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80" 
-                                     alt="Cybersecurity" class="w-full h-full object-cover">
-                                <div class="absolute top-4 right-4 bg-gold-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                    Security
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                                    <span>May 18, 2023</span>
-                                    <span class="mx-2">•</span>
-                                    <span>9 min read</span>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Zero Trust Architecture: Implementation Guide</h3>
-                                <p class="text-gray-600 dark:text-gray-300 mb-4">A practical approach to implementing zero trust security models in modern enterprise environments.</p>
-                                <div class="flex justify-between items-center">
-                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('article')">Read More</a>
-                                    <div class="flex space-x-2">
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-bookmark"></i>
-                                        </button>
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-share-square"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Article 6 -->
-                        <div class="bg-white dark:bg-slate-700 rounded-xl overflow-hidden shadow-md post-card transition duration-300">
-                            <div class="relative h-48 overflow-hidden">
-                                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80" 
-                                     alt="Data Engineering" class="w-full h-full object-cover">
-                                <div class="absolute top-4 right-4 bg-gold-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                                    Data
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
-                                    <span>May 11, 2023</span>
-                                    <span class="mx-2">•</span>
-                                    <span>11 min read</span>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Modern Data Stack: Components and Best Practices</h3>
-                                <p class="text-gray-600 dark:text-gray-300 mb-4">An overview of the essential components in today's data stack and how to implement them effectively.</p>
-                                <div class="flex justify-between items-center">
-                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('article')">Read More</a>
-                                    <div class="flex space-x-2">
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-bookmark"></i>
-                                        </button>
-                                        <button class="text-gray-400 hover:text-gold-500">
-                                            <i class="far fa-share-square"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-center">
-                        <nav class="flex items-center space-x-2">
-                            <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-white hover:bg-gold-500 hover:text-white">
-                                <i class="fas fa-chevron-left"></i>
+                            <button class="text-gold-600 dark:text-gold-400 hover:text-gold-700 dark:hover:text-gold-300">
+                                <i class="fas fa-bookmark"></i>
                             </button>
-                            <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gold-500 text-white">1</button>
-                            <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-white hover:bg-gold-500 hover:text-white">2</button>
-                            <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-white hover:bg-gold-500 hover:text-white">3</button>
-                            <span class="px-2 text-gray-500">...</span>
-                            <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-white hover:bg-gold-500 hover:text-white">8</button>
-                            <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-white hover:bg-gold-500 hover:text-white">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </nav>
+                        </div>
                     </div>
                 </div>
-            </section>
+                
+                <!-- Article 2 -->
+                <div class="article-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="AI Ethics" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-gold-500 text-white text-xs px-3 py-1 rounded-full">AI</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                            <span>June 8, 2023</span>
+                            <span class="mx-2">•</span>
+                            <span>12 min read</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Ethical Considerations in AI Development</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">A deep dive into the moral responsibilities of AI developers and how to implement ethical frameworks.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
+                                <span class="text-sm">Michael Chen</span>
+                            </div>
+                            <button class="text-gold-600 dark:text-gold-400 hover:text-gold-700 dark:hover:text-gold-300">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Article 3 -->
+                <div class="article-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="DevOps" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-gold-500 text-white text-xs px-3 py-1 rounded-full">DevOps</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                            <span>June 1, 2023</span>
+                            <span class="mx-2">•</span>
+                            <span>6 min read</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Modern DevOps Practices for Small Teams</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">How lean teams can implement effective DevOps strategies without overwhelming resources.</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
+                                <span class="text-sm">Emma Rodriguez</span>
+                            </div>
+                            <button class="text-gold-600 dark:text-gold-400 hover:text-gold-700 dark:hover:text-gold-300">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <!-- Article Detail Page -->
-        <div id="article" class="page">
-            <section class="py-16 bg-white dark:bg-slate-900">
-                <div class="container mx-auto px-4 max-w-4xl">
-                    <div class="mb-8">
-                        <a href="#" class="text-gold-500 hover:text-gold-600 font-medium flex items-center" onclick="showPage('articles')">
-                            <i class="fas fa-arrow-left mr-2"></i> Back to Articles
+    <!-- Interactive Dashboards -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl font-bold text-gold-700 dark:text-gold-300">Interactive Dashboards</h2>
+                <a href="#" class="text-gold-600 dark:text-gold-400 hover:underline flex items-center">
+                    Explore all <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Dashboard 1 -->
+                <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gold-700 dark:text-gold-300">Tech Trends 2023</h3>
+                        <div class="flex space-x-2">
+                            <button class="bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 px-3 py-1 rounded-full text-sm">Quarterly</button>
+                            <button class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm">Annual</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="techTrendsChart"></canvas>
+                    </div>
+                    <div class="mt-6 grid grid-cols-3 gap-4">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">AI Adoption</p>
+                            <p class="text-xl font-bold text-gold-600 dark:text-gold-400">+42%</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Cloud Growth</p>
+                            <p class="text-xl font-bold text-gold-600 dark:text-gold-400">+28%</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">DevOps</p>
+                            <p class="text-xl font-bold text-gold-600 dark:text-gold-400">+35%</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dashboard 2 -->
+                <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gold-700 dark:text-gold-300">Programming Language Popularity</h3>
+                        <div class="flex space-x-2">
+                            <button class="bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 px-3 py-1 rounded-full text-sm">2023</button>
+                            <button class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm">2022</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="languagePopularityChart"></canvas>
+                    </div>
+                    <div class="mt-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                <span class="text-sm">Python</span>
+                            </div>
+                            <span class="text-sm font-medium">32%</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                                <span class="text-sm">JavaScript</span>
+                            </div>
+                            <span class="text-sm font-medium">28%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                                <span class="text-sm">Java</span>
+                            </div>
+                            <span class="text-sm font-medium">18%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 bg-gold-50 dark:bg-gold-900">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <div class="inline-block bg-gold-100 dark:bg-gold-800 text-gold-700 dark:text-gold-300 px-4 py-2 rounded-full mb-4">
+                    <i class="fas fa-envelope mr-2"></i> Stay Updated
+                </div>
+                <h2 class="text-3xl font-bold mb-4 text-gold-700 dark:text-gold-300">Subscribe to Our Newsletter</h2>
+                <p class="text-lg mb-8 text-gold-600 dark:text-gold-400">Get the latest articles, insights and tech news delivered straight to your inbox.</p>
+                <form class="flex flex-col sm:flex-row justify-center gap-4">
+                    <input type="email" placeholder="Your email address" class="flex-grow max-w-md px-4 py-3 rounded-full border border-gold-300 dark:border-gold-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gold-500">
+                    <button class="bg-gold-600 hover:bg-gold-700 text-white px-6 py-3 rounded-full font-medium transition-colors whitespace-nowrap">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="text-sm mt-4 text-gold-500 dark:text-gold-300">We respect your privacy. Unsubscribe at any time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Tags -->
+    <section class="py-16 bg-white dark:bg-dark-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gold-700 dark:text-gold-300">Explore by Topics</h2>
+            
+            <div class="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+                <a href="#" class="tag px-4 py-2 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full hover:shadow-md transition-all">
+                    #DataScience
+                </a>
+                <a href="#" class="tag px-4 py-2 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full hover:shadow-md transition-all">
+                    #MachineLearning
+                </a>
+                <a href="#" class="tag px-4 py-2 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full hover:shadow-md transition-all">
+                    #CloudComputing
+                </a>
+                <a href="#" class="tag px-4 py-2 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full hover:shadow-md transition-all">
+                    #DevOps
+                </a>
+                <a href="#" class="tag px-4 py-2 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full hover:shadow-md transition-all">
+                    #SoftwareArchitecture
+                </a>
+                <a href="#" class="tag px-4 py-2 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full hover:shadow-md transition-all">
+                    #Cybersecurity
+                </a>
+                <a href="#" class="tag px-4 py-2 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full hover:shadow-md transition-all">
+                    #Blockchain
+                </a>
+                <a href="#" class="tag px-4 py-2 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full hover:shadow-md transition-all">
+                    #Programming
+                </a>
+                <a href="#" class="tag px-4 py-2 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full hover:shadow-md transition-all">
+                    #DataEngineering
+                </a>
+                <a href="#" class="tag px-4 py-2 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full hover:shadow-md transition-all">
+                    #TechCulture
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-800 pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-laptop-code text-2xl text-gold-500"></i>
+                        <h3 class="text-xl font-bold text-gold-600 dark:text-gold-400">TechSphere</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Exploring the intersection of data, software, and technology culture.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">
+                            <i class="fab fa-youtube"></i>
                         </a>
                     </div>
-                    
-                    <article>
-                        <div class="mb-8">
-                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
-                                <span>June 15, 2023</span>
-                                <span class="mx-2">•</span>
-                                <span>8 min read</span>
-                                <span class="mx-2">•</span>
-                                <span class="bg-gold-100 dark:bg-gold-900 text-gold-800 dark:text-gold-200 px-2 py-1 rounded-full">Data Culture</span>
-                            </div>
-                            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-6">Building a Data-Driven Culture in Your Organization</h1>
-                            <div class="flex items-center mb-8">
-                                <div class="w-10 h-10 rounded-full bg-gold-200 dark:bg-gold-900 flex items-center justify-center text-gold-600 dark:text-gold-300 font-bold mr-4">
-                                    JD
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 dark:text-white">Jane Doe</h4>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Data Strategy Lead</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="relative h-96 overflow-hidden rounded-xl mb-8">
-                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                                 alt="Data Visualization" class="w-full h-full object-cover">
-                        </div>
-                        
-                        <div class="prose dark:prose-invert max-w-none mb-8">
-                            <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">In today's digital economy, data is often described as the new oil. But unlike oil, data's value isn't in its raw form—it's in how it's refined and utilized across an organization. Building a truly data-driven culture requires more than just implementing the right tools; it demands a fundamental shift in how decisions are made at every level.</p>
-                            
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mt-10 mb-4">The Foundations of Data Culture</h2>
-                            
-                            <p class="text-gray-600 dark:text-gray-300 mb-4">A data-driven culture is one where data is the primary driver of decisions, rather than intuition or hierarchy. In these organizations:</p>
-                            
-                            <ul class="list-disc pl-6 mb-6 text-gray-600 dark:text-gray-300 space-y-2">
-                                <li>Data is accessible to all employees who need it</li>
-                                <li>Data literacy is considered a core competency</li>
-                                <li>Experimentation and evidence trump opinion</li>
-                                <li>Failures are analyzed for learning, not blame</li>
-                            </ul>
-                            
-                            <div class="bg-gold-50 dark:bg-slate-800 p-6 rounded-xl mb-8">
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Key Data Culture Metrics</h3>
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    <div class="text-center">
-                                        <p class="text-3xl font-bold text-gold-500">72%</p>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Data-driven decisions</p>
-                                    </div>
-                                    <div class="text-center">
-                                        <p class="text-3xl font-bold text-gold-500">58%</p>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Teams with data access</p>
-                                    </div>
-                                    <div class="text-center">
-                                        <p class="text-3xl font-bold text-gold-500">64%</p>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Data literacy rate</p>
-                                    </div>
-                                    <div class="text-center">
-                                        <p class="text-3xl font-bold text-gold-500">3.2x</p>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Higher ROI</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mt-10 mb-4">Implementing Data Culture: A 5-Step Framework</h2>
-                            
-                            <h3 class="text-xl font-bold text-gray-800 dark:text-white mt-8 mb-3">1. Leadership Commitment</h3>
-                            <p class="text-gray-600 dark:text-gray-300 mb-4">Cultural transformation must start at the top. Executives need to model data-driven behavior by:</p>
-                            <ul class="list-disc pl-6 mb-6 text-gray-600 dark:text-gray-300 space-y-2">
-                                <li>Asking for data to support proposals</li>
-                                <li>Publicly acknowledging when data changed their mind</li>
-                                <li>Investing in data infrastructure and training</li>
-                            </ul>
-                            
-                            <h3 class="text-xl font-bold text-gray-800 dark:text-white mt-8 mb-3">2. Democratize Data Access</h3>
-                            <p class="text-gray-600 dark:text-gray-300 mb-4">Break down data silos by implementing:</p>
-                            <ul class="list-disc pl-6 mb-6 text-gray-600 dark:text-gray-300 space-y-2">
-                                <li>Self-service analytics platforms</li>
-                                <li>Standardized data dictionaries</li>
-                                <li>Clear governance policies</li>
-                            </ul>
-                            
-                            <div class="relative bg-white dark:bg-slate-700 p-6 rounded-xl shadow-md mb-8">
-                                <div class="absolute -top-4 -left-4 w-12 h-12 bg-gold-500 rounded-full flex items-center justify-center text-white">
-                                    <i class="fas fa-lightbulb"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Pro Tip: Start Small</h3>
-                                <p class="text-gray-600 dark:text-gray-300">Begin with one department or business unit as a pilot. Document successes and challenges to inform broader rollout.</p>
-                            </div>
-                            
-                            <h3 class="text-xl font-bold text-gray-800 dark:text-white mt-8 mb-3">3. Build Data Literacy</h3>
-                            <p class="text-gray-600 dark:text-gray-300 mb-4">Create training programs that cover:</p>
-                            <ul class="list-disc pl-6 mb-6 text-gray-600 dark:text-gray-300 space-y-2">
-                                <li>Basic data concepts</li>
-                                <li>Tool-specific training</li>
-                                <li>Critical thinking with data</li>
-                                <li>Common pitfalls and biases</li>
-                            </ul>
-                            
-                            <h3 class="text-xl font-bold text-gray-800 dark:text-white mt-8 mb-3">4. Reward Evidence-Based Decisions</h3>
-                            <p class="text-gray-600 dark:text-gray-300 mb-4">Align incentives by:</p>
-                            <ul class="list-disc pl-6 mb-6 text-gray-600 dark:text-gray-300 space-y-2">
-                                <li>Recognizing teams that use data effectively</li>
-                                <li>Incorporating data use into performance reviews</li>
-                                <li>Creating "data champion" roles</li>
-                            </ul>
-                            
-                            <h3 class="text-xl font-bold text-gray-800 dark:text-white mt-8 mb-3">5. Measure and Iterate</h3>
-                            <p class="text-gray-600 dark:text-gray-300 mb-4">Track progress with metrics like:</p>
-                            <ul class="list-disc pl-6 mb-6 text-gray-600 dark:text-gray-300 space-y-2">
-                                <li>% of decisions supported by data</li>
-                                <li>Employee data literacy scores</li>
-                                <li>Time-to-insight metrics</li>
-                                <li>Data quality indicators</li>
-                            </ul>
-                            
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mt-10 mb-4">Overcoming Common Challenges</h2>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                                <div class="bg-gold-50 dark:bg-slate-800 p-6 rounded-xl">
-                                    <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-3">Resistance to Change</h3>
-                                    <p class="text-gray-600 dark:text-gray-300">Address fears through clear communication about how data empowers rather than replaces human judgment.</p>
-                                </div>
-                                <div class="bg-gold-50 dark:bg-slate-800 p-6 rounded-xl">
-                                    <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-3">Data Quality Issues</h3>
-                                    <p class="text-gray-600 dark:text-gray-300">Implement data governance early, but don't let perfection become the enemy of progress.</p>
-                                </div>
-                                <div class="bg-gold-50 dark:bg-slate-800 p-6 rounded-xl">
-                                    <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-3">Tool Overload</h3>
-                                    <p class="text-gray-600 dark:text-gray-300">Standardize on a core set of tools that meet most needs rather than chasing every new solution.</p>
-                                </div>
-                                <div class="bg-gold-50 dark:bg-slate-800 p-6 rounded-xl">
-                                    <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-3">Analysis Paralysis</h3>
-                                    <p class="text-gray-600 dark:text-gray-300">Set clear thresholds for when "good enough" data should drive action rather than waiting for perfect information.</p>
-                                </div>
-                            </div>
-                            
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mt-10 mb-4">The Business Impact</h2>
-                            
-                            <p class="text-gray-600 dark:text-gray-300 mb-6">Organizations that successfully build data-driven cultures see measurable benefits:</p>
-                            
-                            <div class="chart-container mb-8">
-                                <canvas id="impactChart"></canvas>
-                            </div>
-                            
-                            <p class="text-gray-600 dark:text-gray-300 mb-6">Beyond the numbers, data-driven cultures foster innovation, agility, and employee engagement. When people see their decisions making a measurable impact, they become more invested in the organization's success.</p>
-                            
-                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mt-10 mb-4">Getting Started</h2>
-                            
-                            <p class="text-gray-600 dark:text-gray-300 mb-6">Begin your data culture journey with these first steps:</p>
-                            
-                            <ol class="list-decimal pl-6 mb-8 text-gray-600 dark:text-gray-300 space-y-3">
-                                <li>Assess your current state with an employee survey</li>
-                                <li>Identify and empower data champions</li>
-                                <li>Launch a pilot program in one department</li>
-                                <li>Create quick wins to build momentum</li>
-                                <li>Develop a multi-year roadmap for scaling</li>
-                            </ol>
-                            
-                            <div class="border-t border-gray-200 dark:border-slate-700 pt-8 mb-8">
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">About the Author</h3>
-                                <div class="flex items-start">
-                                    <div class="w-16 h-16 rounded-full bg-gold-200 dark:bg-gold-900 flex items-center justify-center text-gold-600 dark:text-gold-300 font-bold text-xl mr-4">
-                                        JD
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-gray-800 dark:text-white">Jane Doe</h4>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Data Strategy Lead at TechCorp</p>
-                                        <p class="text-gray-600 dark:text-gray-300">Jane has helped Fortune 500 companies transform their data cultures over the past decade. She's the author of "Data-Driven by Design" and a frequent speaker at industry conferences.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="border-t border-gray-200 dark:border-slate-700 pt-8 mb-8">
-                            <div class="flex justify-between items-center mb-6">
-                                <h3 class="text-xl font-bold text-gray-800 dark:text-white">Comments (24)</h3>
-                                <button class="bg-gold-500 hover:bg-gold-600 text-white font-bold py-2 px-4 rounded-full transition duration-300" id="addCommentBtn">
-                                    Add Comment
-                                </button>
-                            </div>
-                            
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md mb-6 hidden" id="commentForm">
-                                <h4 class="font-bold text-gray-800 dark:text-white mb-4">Leave a Comment</h4>
-                                <textarea class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500 mb-4" placeholder="Share your thoughts..." rows="4"></textarea>
-                                <div class="flex justify-end">
-                                    <button class="bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-white font-bold py-2 px-4 rounded-full mr-2 transition duration-300" id="cancelCommentBtn">
-                                        Cancel
-                                    </button>
-                                    <button class="bg-gold-500 hover:bg-gold-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
-                                        Post Comment
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="space-y-6">
-                                <!-- Comment 1 -->
-                                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md">
-                                    <div class="flex items-start mb-4">
-                                        <div class="w-10 h-10 rounded-full bg-gold-200 dark:bg-gold-900 flex items-center justify-center text-gold-600 dark:text-gold-300 font-bold text-sm mr-4">
-                                            TS
-                                        </div>
-                                        <div>
-                                            <h4 class="font-bold text-gray-800 dark:text-white">Taylor Smith</h4>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">2 days ago</p>
-                                        </div>
-                                    </div>
-                                    <p class="text-gray-600 dark:text-gray-300 mb-4">This article perfectly captures the challenges we've faced in our transformation journey. The point about leadership commitment is so crucial—we saw immediate improvements when our CEO started asking "what does the data say?" in every meeting.</p>
-                                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                        <button class="flex items-center mr-4 hover:text-gold-500">
-                                            <i class="far fa-thumbs-up mr-1"></i> 12
-                                        </button>
-                                        <button class="flex items-center mr-4 hover:text-gold-500">
-                                            <i class="far fa-thumbs-down mr-1"></i> 2
-                                        </button>
-                                        <button class="flex items-center hover:text-gold-500">
-                                            <i class="far fa-comment mr-1"></i> Reply
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Comment 2 -->
-                                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md ml-8">
-                                    <div class="flex items-start mb-4">
-                                        <div class="w-10 h-10 rounded-full bg-gold-200 dark:bg-gold-900 flex items-center justify-center text-gold-600 dark:text-gold-300 font-bold text-sm mr-4">
-                                            AJ
-                                        </div>
-                                        <div>
-                                            <h4 class="font-bold text-gray-800 dark:text-white">Alex Johnson</h4>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">1 day ago</p>
-                                        </div>
-                                    </div>
-                                    <p class="text-gray-600 dark:text-gray-300 mb-4">I'd love to hear more about how you measure data literacy across an organization. We've tried surveys but find people overestimate their capabilities.</p>
-                                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                        <button class="flex items-center mr-4 hover:text-gold-500">
-                                            <i class="far fa-thumbs-up mr-1"></i> 5
-                                        </button>
-                                        <button class="flex items-center mr-4 hover:text-gold-500">
-                                            <i class="far fa-thumbs-down mr-1"></i> 0
-                                        </button>
-                                        <button class="flex items-center hover:text-gold-500">
-                                            <i class="far fa-comment mr-1"></i> Reply
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Comment 3 -->
-                                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md">
-                                    <div class="flex items-start mb-4">
-                                        <div class="w-10 h-10 rounded-full bg-gold-200 dark:bg-gold-900 flex items-center justify-center text-gold-600 dark:text-gold-300 font-bold text-sm mr-4">
-                                            MR
-                                        </div>
-                                        <div>
-                                            <h4 class="font-bold text-gray-800 dark:text-white">Maria Rodriguez</h4>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">5 hours ago</p>
-                                        </div>
-                                    </div>
-                                    <p class="text-gray-600 dark:text-gray-300 mb-4">The framework is excellent, but I'd emphasize even more the importance of change management. We had all the right tools and training, but without addressing the human side of change, adoption lagged.</p>
-                                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                        <button class="flex items-center mr-4 hover:text-gold-500">
-                                            <i class="far fa-thumbs-up mr-1"></i> 8
-                                        </button>
-                                        <button class="flex items-center mr-4 hover:text-gold-500">
-                                            <i class="far fa-thumbs-down mr-1"></i> 1
-                                        </button>
-                                        <button class="flex items-center hover:text-gold-500">
-                                            <i class="far fa-comment mr-1"></i> Reply
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <div class="border-t border-gray-200 dark:border-slate-700 pt-8">
-                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Related Articles</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md flex items-start">
-                                <div class="w-16 h-16 rounded-lg overflow-hidden mr-4 flex-shrink-0">
-                                    <img src="https://images.unsplash.com/photo-1551269901-5c5e14c25df7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" 
-                                         alt="Data Governance" class="w-full h-full object-cover">
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 dark:text-white mb-1">Data Governance for Modern Organizations</h4>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">May 28, 2023 • 6 min read</p>
-                                    <a href="#" class="text-gold-500 hover:text-gold-600 text-sm font-medium" onclick="showPage('article')">Read More</a>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md flex items-start">
-                                <div class="w-16 h-16 rounded-lg overflow-hidden mr-4 flex-shrink-0">
-                                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                                         alt="Data Literacy" class="w-full h-full object-cover">
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 dark:text-white mb-1">Building Data Literacy Across Your Team</h4>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">May 21, 2023 • 5 min read</p>
-                                    <a href="#" class="text-gold-500 hover:text-gold-600 text-sm font-medium" onclick="showPage('article')">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </section>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-gold-700 dark:text-gold-300">Explore</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Articles</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Dashboards</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Podcasts</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Topics</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Authors</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-gold-700 dark:text-gold-300">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">About</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Careers</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-gold-700 dark:text-gold-300">Subscribe</h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Get the latest tech insights delivered to your inbox.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gold-500 w-full">
+                        <button class="bg-gold-500 hover:bg-gold-600 text-white px-4 py-2 rounded-r-full">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 dark:border-gray-700 mt-12 pt-8 text-center text-gray-500 dark:text-gray-400">
+                <p>© 2023 TechSphere. All rights reserved.</p>
+            </div>
         </div>
+    </footer>
 
-        <!-- Dashboards Page -->
-        <div id="dashboards" class="page">
-            <section class="py-16 bg-white dark:bg-slate-900">
-                <div class="container mx-auto px-4">
-                    <div class="text-center mb-12">
-                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Explore Our <span class="text-gold-500">Interactive</span> Dashboards</h2>
-                        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mt-4">Visualize tech trends and data patterns with our interactive tools</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-                        <div class="bg-gold-50 dark:bg-slate-800 rounded-xl p-6 shadow-md">
-                            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Programming Language Popularity</h3>
-                            <div class="chart-container">
-                                <canvas id="languageChart"></canvas>
-                            </div>
-                            <div class="mt-4 flex justify-center space-x-4">
-                                <button class="bg-gold-500 hover:bg-gold
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+        
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tech Trends Chart
+            const techTrendsCtx = document.getElementById('techTrendsChart').getContext('2d');
+            const techTrendsChart = new Chart(techTrendsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [
+                        {
+                            label: 'AI Adoption',
+                            data: [12, 19, 15, 27, 33, 42],
+                            borderColor: '#FFD700',
+                            backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Cloud Growth',
+                            data: [19, 22, 18, 21, 24, 28],
+                            borderColor: '#4F46E5',
+                            backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'DevOps',
+                            data: [15, 18, 22, 25, 30, 35],
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: html.classList.contains('dark') ? '#E5E7EB' : '#4B5563'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: html.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: html.classList.contains('dark') ? '#E5E7EB' : '#4B5563'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: html.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: html.classList.contains('dark') ? '#E5E7EB' : '#4B5563'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Language Popularity Chart
+            const languagePopularityCtx = document.getElementById('languagePopularityChart').getContext('2d');
+            const languagePopularityChart = new Chart(languagePopularityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Python', 'JavaScript', 'Java', 'C#', 'PHP', 'Others'],
+                    datasets: [{
+                        data: [32, 28, 18, 8, 6, 8],
+                        backgroundColor: [
+                            '#FFD700',
+                            '#4F46E5',
+                            '#EF4444',
+                            '#10B981',
+                            '#F59E0B',
+                            '#6B7280'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: html.classList.contains('dark') ? '#E5E7EB' : '#4B5563'
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+            
+            // Update chart colors when theme changes
+            const observer = new MutationObserver(() => {
+                techTrendsChart.options.plugins.legend.labels.color = html.classList.contains('dark') ? '#E5E7EB' : '#4B5563';
+                techTrendsChart.options.scales.y.grid.color = html.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                techTrendsChart.options.scales.y.ticks.color = html.classList.contains('dark') ? '#E5E7EB' : '#4B5563';
+                techTrendsChart.options.scales.x.grid.color = html.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                techTrendsChart.options.scales.x.ticks.color = html.classList.contains('dark') ? '#E5E7EB' : '#4B5563';
+                techTrendsChart.update();
+                
+                languagePopularityChart.options.plugins.legend.labels.color = html.classList.contains('dark') ? '#E5E7EB' : '#4B5563';
+                languagePopularityChart.update();
+            });
+            
+            observer.observe(html, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        });
+    </script>
+</body>
 </html>
