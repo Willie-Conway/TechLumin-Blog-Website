@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | TechSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        tech: {
+                            100: '#E6F7FF',
+                            200: '#BAE3FF',
+                            300: '#7CC4FA',
+                            400: '#47A3F3',
+                            500: '#2186EB', // Primary tech blue
+                            600: '#0967D2',
+                            700: '#0552B5',
+                            800: '#03449E',
+                            900: '#01337D',
+                        },
+                        dark: {
+                            800: '#1A1A1A',
+                            900: '#0D0D0D'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(33, 134, 235, 0.2);
+        }
+        .dark .contact-card:hover {
+            box-shadow: 0 10px 25px rgba(33, 134, 235, 0.3);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #2186EB;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .floating-shape {
+            animation: float 6s ease-in-out infinite;
+        }
+        .floating-shape.delay-1 {
+            animation-delay: 1s;
+        }
+        .floating-shape.delay-2 {
+            animation-delay: 2s;
+        }
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(33, 134, 235, 0.3);
+        }
+        .map-container {
+            filter: grayscale(30%);
+            transition: filter 0.3s ease;
+        }
+        .map-container:hover {
+            filter: grayscale(0%);
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-dark-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-dark-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-laptop-code text-3xl text-tech-500"></i>
+                    <h1 class="text-2xl font-bold text-tech-600 dark:text-tech-400">TechSphere</h1>
+                </div>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="nav-link font-medium">Home</a>
+                    <a href="#" class="nav-link font-medium">Articles</a>
+                    <a href="#" class="nav-link font-medium">Dashboards</a>
+                    <a href="#" class="nav-link font-medium">Podcasts</a>
+                    <a href="#" class="nav-link font-medium">About</a>
+                    <a href="#" class="nav-link font-medium active">Contact</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="mode-toggle p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-tech-600 dark:text-tech-400">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-2 rounded-full font-medium transition-colors">
+                        Subscribe
+                    </button>
+                    <button class="md:hidden p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-r from-tech-100 to-white dark:from-tech-900 dark:to-dark-800 py-20">
+        <!-- Floating shapes -->
+        <div class="absolute top-20 left-10 w-16 h-16 rounded-full bg-tech-300/20 dark:bg-tech-700/20 floating-shape"></div>
+        <div class="absolute top-1/3 right-20 w-24 h-24 rounded-full bg-tech-400/20 dark:bg-tech-600/20 floating-shape delay-1"></div>
+        <div class="absolute bottom-20 left-1/4 w-20 h-20 rounded-full bg-tech-500/20 dark:bg-tech-500/20 floating-shape delay-2"></div>
+        
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center relative z-10">
+                <span class="inline-block bg-tech-500/10 text-tech-600 dark:text-tech-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    <i class="fas fa-headset mr-2"></i> We're Here to Help
+                </span>
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-tech-700 dark:text-tech-300">Get In Touch With Us</h1>
+                <p class="text-xl mb-8 text-gray-700 dark:text-gray-300">Have questions, feedback, or partnership inquiries? Our team is ready to assist you with anything related to TechSphere.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#contact-form" class="bg-tech-500 hover:bg-tech-600 text-white px-6 py-3 rounded-full font-medium transition-colors">
+                        <i class="fas fa-envelope mr-2"></i> Send Message
+                    </a>
+                    <a href="#locations" class="bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-tech-500 dark:text-tech-400 px-6 py-3 rounded-full font-medium transition-colors border border-tech-500 dark:border-tech-400">
+                        <i class="fas fa-map-marker-alt mr-2"></i> Our Locations
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Options Section -->
+    <section class="py-16 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">How Would You Like to Connect?</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Choose the contact method that works best for you.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="contact-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8 transition-all duration-300">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-envelope text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Email Us</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center mb-4">For general inquiries and support</p>
+                    <a href="mailto:hello@techsphere.com" class="block text-center text-tech-500 dark:text-tech-400 font-medium hover:underline">hello@techsphere.com</a>
+                </div>
+                
+                <div class="contact-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8 transition-all duration-300">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-phone-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Call Us</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center mb-4">Monday-Friday, 9am-5pm EST</p>
+                    <a href="tel:+18005551234" class="block text-center text-tech-500 dark:text-tech-400 font-medium hover:underline">+1 (800) 555-1234</a>
+                </div>
+                
+                <div class="contact-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8 transition-all duration-300">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-comments text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Live Chat</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center mb-4">Instant support during business hours</p>
+                    <button class="bg-tech-500 hover:bg-tech-600 text-white px-6 py-2 rounded-full font-medium transition-colors mx-auto block">
+                        Start Chat
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section id="contact-form" class="py-20 bg-tech-50 dark:bg-tech-900">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden">
+                    <div class="md:flex">
+                        <div class="md:w-1/2 bg-tech-500 p-10 text-white">
+                            <h2 class="text-3xl font-bold mb-6">Send Us a Message</h2>
+                            <p class="mb-8">Fill out the form and our team will get back to you within 24 hours. For urgent matters, please call us directly.</p>
+                            
+                            <div class="space-y-6">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mt-1">
+                                        <div class="w-8 h-8 rounded-full bg-tech-400 flex items-center justify-center">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="font-semibold">Quick Response</h3>
+                                        <p class="text-tech-100 text-sm">Typically replies within 24 hours</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mt-1">
+                                        <div class="w-8 h-8 rounded-full bg-tech-400 flex items-center justify-center">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="font-semibold">Expert Support</h3>
+                                        <p class="text-tech-100 text-sm">Our team knows TechSphere inside out</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mt-1">
+                                        <div class="w-8 h-8 rounded-full bg-tech-400 flex items-center justify-center">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="font-semibold">Secure Communication</h3>
+                                        <p class="text-tech-100 text-sm">Your information is always protected</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-1/2 p-10">
+                            <form id="form" class="space-y-6">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+                                    <input type="text" id="name" name="name" required class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:border-tech-500 dark:focus:border-tech-500 bg-white dark:bg-gray-800 transition-colors">
+                                </div>
+                                
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                                    <input type="email" id="email" name="email" required class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:border-tech-500 dark:focus:border-tech-500 bg-white dark:bg-gray-800 transition-colors">
+                                </div>
+                                
+                                <div>
+                                    <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
+                                    <select id="subject" name="subject" class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:border-tech-500 dark:focus:border-tech-500 bg-white dark:bg-gray-800 transition-colors">
+                                        <option value="">Select a subject</option>
+                                        <option value="General Inquiry">General Inquiry</option>
+                                        <option value="Technical Support">Technical Support</option>
+                                        <option value="Partnership">Partnership</option>
+                                        <option value="Advertising">Advertising</option>
+                                        <option value="Feedback">Feedback</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your Message</label>
+                                    <textarea id="message" name="message" rows="5" required class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:border-tech-500 dark:focus:border-tech-500 bg-white dark:bg-gray-800 transition-colors"></textarea>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="subscribe" name="subscribe" class="h-4 w-4 text-tech-500 focus:ring-tech-500 border-gray-300 dark:border-gray-700 rounded">
+                                    <label for="subscribe" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                                        Subscribe to our newsletter
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="w-full bg-tech-500 hover:bg-tech-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                                    Send Message <i class="fas fa-paper-plane ml-2"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">Frequently Asked Questions</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Quick answers to common questions about TechSphere.</p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">How can I contribute content to TechSphere?</h3>
+                        <i class="fas fa-chevron-down text-tech-500 transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600 dark:text-gray-400">We welcome contributions from tech experts and enthusiasts! Please send us a pitch with your article idea, writing samples, and relevant experience to submissions@techsphere.com. Our editorial team reviews all submissions and will get back to you within 2 weeks.</p>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">What's your advertising policy?</h3>
+                        <i class="fas fa-chevron-down text-tech-500 transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600 dark:text-gray-400">TechSphere offers various advertising opportunities including sponsored content, display ads, and newsletter sponsorships. We maintain strict editorial independence and clearly label all sponsored content. For rates and availability, please contact our sales team at ads@techsphere.com.</p>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">How do I report a technical issue with the website?</h3>
+                        <i class="fas fa-chevron-down text-tech-500 transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600 dark:text-gray-400">If you encounter any technical issues while using TechSphere, please email our support team at support@techsphere.com with details about the problem, including the device and browser you're using, any error messages you see, and steps to reproduce the issue. Screenshots are always helpful!</p>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">Can I request a specific topic to be covered?</h3>
+                        <i class="fas fa-chevron-down text-tech-500 transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600 dark:text-gray-400">Absolutely! We value input from our community about topics you'd like to see covered. You can submit topic suggestions through our contact form or by tweeting @TechSphere with #TechSphereSuggestion. Our editorial team reviews all requests and prioritizes based on community interest and relevance.</p>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">Do you offer corporate subscriptions or group access?</h3>
+                        <i class="fas fa-chevron-down text-tech-500 transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600 dark:text-gray-400">Yes, we offer enterprise solutions for teams and organizations. Our corporate plans include team accounts, analytics dashboards, and customized content packages. For more information and pricing, please contact our enterprise team at enterprise@techsphere.com.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Locations Section -->
+    <section id="locations" class="py-20 bg-tech-50 dark:bg-tech-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">Our Global Offices</h2>
+                <p class="text-lg text-tech-600 dark:text-tech-400 max-w-2xl mx-auto">Visit us at one of our locations around the world.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden">
+                    <div class="h-64 map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215256627966!2d-73.9878449242391!3d40.74844097138964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1689873701231!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-xl font-bold mb-4 text-tech-600 dark:text-tech-400">New York Headquarters</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1 text-tech-500">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-gray-600 dark:text-gray-400">350 5th Avenue, Suite 701<br>New York, NY 10118</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1 text-tech-500">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-gray-600 dark:text-gray-400">+1 (212) 555-0198</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1 text-tech-500">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-gray-600 dark:text-gray-400">Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday - Sunday: Closed</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden">
+                    <div class="h-64 map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.779229308289!2d-0.08140692323974055!3d51.51446397181386!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876034add2a4013%3A0x260e5f1d1b9d759!2sThe%20Shard!5e0!3m2!1sen!2suk!4v1689873800013!5m2!1sen!2suk" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-xl font-bold mb-4 text-tech-600 dark:text-tech-400">London Office</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1 text-tech-500">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-gray-600 dark:text-gray-400">32 London Bridge Street, Level 12<br>London SE1 9SG, UK</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1 text-tech-500">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-gray-600 dark:text-gray-400">+44 (0)20 7946 0958</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 mt-1 text-tech-500">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-gray-600 dark:text-gray-400">Monday - Friday: 9:00 AM - 5:30 PM<br>Saturday - Sunday: Closed</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <p class="text-gray-600 dark:text-gray-400 mb-6">Don't see your region? We have remote team members across 15 countries.</p>
+                <a href="mailto:careers@techsphere.com" class="inline-block bg-tech-500 hover:bg-tech-600 text-white px-6 py-3 rounded-full font-medium transition-colors">
+                    <i class="fas fa-globe mr-2"></i> Explore Remote Opportunities
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-tech-500 to-tech-700">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-6 text-white">Stay Connected With TechSphere</h2>
+                <p class="text-xl mb-8 text-tech-100">Follow us on social media for the latest updates, tech news, and community discussions.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#" class="bg-white hover:bg-gray-100 text-tech-600 px-6 py-3 rounded-full font-medium transition-colors">
+                        <i class="fab fa-twitter mr-2"></i> Twitter
+                    </a>
+                    <a href="#" class="bg-white hover:bg-gray-100 text-tech-600 px-6 py-3 rounded-full font-medium transition-colors">
+                        <i class="fab fa-linkedin mr-2"></i> LinkedIn
+                    </a>
+                    <a href="#" class="bg-white hover:bg-gray-100 text-tech-600 px-6 py-3 rounded-full font-medium transition-colors">
+                        <i class="fab fa-instagram mr-2"></i> Instagram
+                    </a>
+                    <a href="#" class="bg-white hover:bg-gray-100 text-tech-600 px-6 py-3 rounded-full font-medium transition-colors">
+                        <i class="fab fa-youtube mr-2"></i> YouTube
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-800 pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-laptop-code text-2xl text-tech-500"></i>
+                        <h3 class="text-xl font-bold text-tech-600 dark:text-tech-400">TechSphere</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Exploring the intersection of technology, innovation, and culture through podcasts.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Articles</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Podcasts</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Dashboards</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Newsletter</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Events</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">About</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Careers</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Subscribe</h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Get the latest tech insights delivered to your inbox.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-tech-500 w-full">
+                        <button class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-2 rounded-r-full">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 dark:border-gray-700 mt-12 pt-8 text-center text-gray-500 dark:text-gray-400">
+                <p>© 2023 TechSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('i');
+                
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+
+        // Form submission handling
+        const form = document.getElementById('form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Here you would typically send the form data to your server
+            // For this example, we'll just show a success message
+            alert('Thank you for your message! We will get back to you soon.');
+            form.reset();
+        });
+
+        // Animation for contact cards when they come into view
+        const contactCards = document.querySelectorAll('.contact-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        contactCards.forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
