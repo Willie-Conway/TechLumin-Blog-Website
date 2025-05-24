@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboards | TechSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            100: '#FFF9E6',
+                            200: '#FFEEB8',
+                            300: '#FFE38A',
+                            400: '#FFD85C',
+                            500: '#FFD700', // Primary gold
+                            600: '#CCAC00',
+                            700: '#998100',
+                            800: '#665600',
+                            900: '#332B00',
+                        },
+                        dark: {
+                            800: '#1A1A1A',
+                            900: '#0D0D0D'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .dashboard-card {
+            transition: all 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .dark .dashboard-card:hover {
+            box-shadow: 0 10px 20px rgba(255,215,0,0.1);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #FFD700;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .tag {
+            transition: all 0.2s ease;
+        }
+        .tag:hover {
+            background-color: #FFEEB8;
+        }
+        .dark .tag:hover {
+            background-color: #665600;
+        }
+        .active-category {
+            background-color: #FFD700 !important;
+            color: white !important;
+        }
+        .chart-container {
+            height: 240px;
+            position: relative;
+        }
+        .preview-image {
+            transition: all 0.3s ease;
+        }
+        .preview-image:hover {
+            transform: scale(1.05);
+        }
+        .tooltip {
+            position: relative;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-dark-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-dark-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-laptop-code text-3xl text-gold-500"></i>
+                    <h1 class="text-2xl font-bold text-gold-600 dark:text-gold-400">TechSphere</h1>
+                </div>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link font-medium">Home</a>
+                    <a href="articles.html" class="nav-link font-medium">Articles</a>
+                    <a href="dashboards.html" class="nav-link font-medium active">Dashboards</a>
+                    <a href="podcasts.html" class="nav-link font-medium">Podcasts</a>
+                    <a href="about.html" class="nav-link font-medium">About</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="mode-toggle p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gold-600 dark:text-gold-400">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button class="bg-gold-500 hover:bg-gold-600 text-white px-4 py-2 rounded-full font-medium transition-colors">
+                        Subscribe
+                    </button>
+                    <button class="md:hidden p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboards Hero -->
+    <section class="relative bg-gradient-to-r from-gold-100 to-white dark:from-gold-900 dark:to-dark-800 py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gold-700 dark:text-gold-300">TechSphere Dashboards</h1>
+                <p class="text-xl mb-8 text-gray-700 dark:text-gray-300">Interactive data visualizations and analytics dashboards for technology trends and metrics.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <input type="text" placeholder="Search dashboards..." class="flex-grow max-w-md px-4 py-3 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gold-500">
+                    <button class="bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-full font-medium transition-colors whitespace-nowrap">
+                        <i class="fas fa-search mr-2"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar -->
+            <aside class="lg:w-1/4">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-700 sticky top-24">
+                    <h3 class="text-xl font-bold mb-6 text-gold-700 dark:text-gold-300 border-b border-gold-200 dark:border-gold-800 pb-3">Categories</h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 active-category">
+                                <i class="fas fa-chart-pie mr-2"></i> All Dashboards
+                            </button>
+                        </li>
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gold-100 dark:hover:bg-gold-900 text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-database mr-2"></i> Data Analytics
+                            </button>
+                        </li>
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gold-100 dark:hover:bg-gold-900 text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-chart-line mr-2"></i> Business Intelligence
+                            </button>
+                        </li>
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gold-100 dark:hover:bg-gold-900 text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-server mr-2"></i> System Monitoring
+                            </button>
+                        </li>
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gold-100 dark:hover:bg-gold-900 text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-globe mr-2"></i> Web Analytics
+                            </button>
+                        </li>
+                        <li>
+                            <button class="category-btn w-full text-left px-4 py-2 rounded-lg hover:bg-gold-100 dark:hover:bg-gold-900 text-gray-700 dark:text-gray-300">
+                                <i class="fas fa-mobile-alt mr-2"></i> App Performance
+                            </button>
+                        </li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold mt-10 mb-6 text-gold-700 dark:text-gold-300 border-b border-gold-200 dark:border-gold-800 pb-3">Popular Tools</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="#" class="tag px-3 py-1 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full text-sm">
+                            #Tableau
+                        </a>
+                        <a href="#" class="tag px-3 py-1 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full text-sm">
+                            #PowerBI
+                        </a>
+                        <a href="#" class="tag px-3 py-1 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full text-sm">
+                            #Grafana
+                        </a>
+                        <a href="#" class="tag px-3 py-1 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full text-sm">
+                            #Looker
+                        </a>
+                        <a href="#" class="tag px-3 py-1 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full text-sm">
+                            #D3.js
+                        </a>
+                        <a href="#" class="tag px-3 py-1 bg-gold-100 dark:bg-gold-900 text-gold-700 dark:text-gold-300 rounded-full text-sm">
+                            #Metabase
+                        </a>
+                    </div>
+
+                    <h3 class="text-xl font-bold mt-10 mb-6 text-gold-700 dark:text-gold-300 border-b border-gold-200 dark:border-gold-800 pb-3">Quick Stats</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Total Dashboards</span>
+                                <span>127</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div class="bg-gold-500 h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Interactive</span>
+                                <span>89</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div class="bg-gold-500 h-2 rounded-full" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>Real-time</span>
+                                <span>42</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div class="bg-gold-500 h-2 rounded-full" style="width: 33%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Dashboards Grid -->
+            <div class="lg:w-3/4">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold text-gold-700 dark:text-gold-300">Featured Dashboards</h2>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Sort by:</span>
+                        <select class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-gold-500">
+                            <option>Most Popular</option>
+                            <option>Recently Added</option>
+                            <option>Most Viewed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Featured Dashboard -->
+                <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700 mb-12">
+                    <div class="relative h-64 overflow-hidden bg-gradient-to-r from-blue-500 to-indigo-600">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center p-8">
+                                <span class="inline-block bg-white/20 text-white px-3 py-1 rounded-full text-sm mb-4">Featured</span>
+                                <h3 class="text-3xl font-bold text-white mb-2">Global Tech Trends 2023</h3>
+                                <p class="text-white/90 mb-6">Interactive visualization of emerging technology adoption across industries</p>
+                                <button class="bg-white text-blue-600 hover:bg-blue-50 px-6 py-2 rounded-full font-medium transition-colors">
+                                    <i class="fas fa-external-link-alt mr-2"></i> Explore Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex flex-wrap gap-4 mb-4">
+                            <div class="flex-1 min-w-[200px]">
+                                <div class="chart-container">
+                                    <canvas id="featuredChart1"></canvas>
+                                </div>
+                            </div>
+                            <div class="flex-1 min-w-[200px]">
+                                <div class="chart-container">
+                                    <canvas id="featuredChart2"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye text-gray-500 dark:text-gray-400 mr-1"></i>
+                                    <span class="text-sm">1,842 views</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-heart text-gray-500 dark:text-gray-400 mr-1"></i>
+                                    <span class="text-sm">326 likes</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-comment text-gray-500 dark:text-gray-400 mr-1"></i>
+                                    <span class="text-sm">42 comments</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="text-gold-600 dark:text-gold-400 hover:text-gold-700 dark:hover:text-gold-300">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                                <button class="text-gold-600 dark:text-gold-400 hover:text-gold-700 dark:hover:text-gold-300">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Dashboard 1 -->
+                    <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                        <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Data Visualization" class="w-full h-full object-cover preview-image">
+                            <div class="absolute top-4 right-4">
+                                <span class="bg-gold-500 text-white text-xs px-3 py-1 rounded-full">Tableau</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                <span>Updated: June 10, 2023</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Cloud Adoption Metrics</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Comparative analysis of AWS, Azure, and GCP adoption across enterprise sectors.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="text-sm">Laura Chen</span>
+                                </div>
+                                <button class="bg-gold-500 hover:bg-gold-600 text-white px-4 py-1 rounded-full text-sm font-medium transition-colors">
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard 2 -->
+                    <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                        <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Marketing Analytics" class="w-full h-full object-cover preview-image">
+                            <div class="absolute top-4 right-4">
+                                <span class="bg-gold-500 text-white text-xs px-3 py-1 rounded-full">Power BI</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                <span>Updated: June 5, 2023</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Digital Marketing Funnel</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Visualization of customer journey from impressions to conversions with drop-off analysis.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="text-sm">James Wilson</span>
+                                </div>
+                                <button class="bg-gold-500 hover:bg-gold-600 text-white px-4 py-1 rounded-full text-sm font-medium transition-colors">
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard 3 -->
+                    <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                        <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Server Monitoring" class="w-full h-full object-cover preview-image">
+                            <div class="absolute top-4 right-4">
+                                <span class="bg-gold-500 text-white text-xs px-3 py-1 rounded-full">Grafana</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                <span>Real-time</span>
+                                <span class="mx-2">•</span>
+                                <span>Updated: June 2, 2023</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Server Health Monitor</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Live tracking of CPU, memory, and network usage across production servers.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/women/23.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="text-sm">Sophia Kim</span>
+                                </div>
+                                <button class="bg-gold-500 hover:bg-gold-600 text-white px-4 py-1 rounded-full text-sm font-medium transition-colors">
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard 4 -->
+                    <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                        <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="AI Metrics" class="w-full h-full object-cover preview-image">
+                            <div class="absolute top-4 right-4">
+                                <span class="bg-gold-500 text-white text-xs px-3 py-1 rounded-full">Custom</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                <span>Updated: May 28, 2023</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">ML Model Performance</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Accuracy, precision, and recall metrics across different machine learning models.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="text-sm">David Park</span>
+                                </div>
+                                <button class="bg-gold-500 hover:bg-gold-600 text-white px-4 py-1 rounded-full text-sm font-medium transition-colors">
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard 5 -->
+                    <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                        <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Financial Data" class="w-full h-full object-cover preview-image">
+                            <div class="absolute top-4 right-4">
+                                <span class="bg-gold-500 text-white text-xs px-3 py-1 rounded-full">Looker</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                <span>Updated: May 22, 2023</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">SaaS Revenue Dashboard</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">MRR, churn rate, and customer acquisition costs for subscription businesses.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="text-sm">Emma Rodriguez</span>
+                                </div>
+                                <button class="bg-gold-500 hover:bg-gold-600 text-white px-4 py-1 rounded-full text-sm font-medium transition-colors">
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard 6 -->
+                    <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-700">
+                        <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Web Analytics" class="w-full h-full object-cover preview-image">
+                            <div class="absolute top-4 right-4">
+                                <span class="bg-gold-500 text-white text-xs px-3 py-1 rounded-full">Google Data Studio</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                <span>Real-time</span>
+                                <span class="mx-2">•</span>
+                                <span>Updated: May 15, 2023</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Website Traffic Analysis</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">Visitor demographics, behavior flow, and conversion paths with real-time data.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/men/33.jpg" alt="Author" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="text-sm">Robert Johnson</span>
+                                </div>
+                                <button class="bg-gold-500 hover:bg-gold-600 text-white px-4 py-1 rounded-full text-sm font-medium transition-colors">
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex justify-center mt-12">
+                    <nav class="flex items-center space-x-2">
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gold-500 text-white">
+                            1
+                        </button>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            2
+                        </button>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            3
+                        </button>
+                        <span class="px-2">...</span>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            8
+                        </button>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Dashboard Tools Section -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4 text-gold-700 dark:text-gold-300">Dashboard Tools & Resources</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Explore our recommended tools and resources to create your own professional dashboards.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Tool 1 -->
+                <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-600">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-chart-bar text-blue-600 dark:text-blue-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Tableau</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Powerful data visualization tool with drag-and-drop functionality and extensive customization options.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Difficulty: <span class="font-medium">Intermediate</span></span>
+                        <a href="#" class="text-sm text-gold-600 dark:text-gold-400 hover:underline">Learn More</a>
+                    </div>
+                </div>
+                
+                <!-- Tool 2 -->
+                <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-600">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-chart-line text-purple-600 dark:text-purple-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Power BI</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Microsoft's business analytics service with strong integration with other Microsoft products.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Difficulty: <span class="font-medium">Beginner</span></span>
+                        <a href="#" class="text-sm text-gold-600 dark:text-gold-400 hover:underline">Learn More</a>
+                    </div>
+                </div>
+                
+                <!-- Tool 3 -->
+                <div class="bg-white dark:bg-gray-700 rounded-xl shadow-md p-6 border border-gray-100 dark:border-gray-600">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-orange-100 dark:bg-orange-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-server text-orange-600 dark:text-orange-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Grafana</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Open-source platform for monitoring and observability with excellent time-series visualization.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Difficulty: <span class="font-medium">Advanced</span></span>
+                        <a href="#" class="text-sm text-gold-600 dark:text-gold-400 hover:underline">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-gold-50 dark:bg-gold-900">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="inline-block bg-gold-100 dark:bg-gold-800 text-gold-700 dark:text-gold-300 px-4 py-2 rounded-full mb-4">
+                    <i class="fas fa-envelope mr-2"></i> Stay Updated
+                </div>
+                <h2 class="text-3xl font-bold mb-4 text-gold-700 dark:text-gold-300">Subscribe to Our Newsletter</h2>
+                <p class="text-lg mb-8 text-gold-600 dark:text-gold-400">Get the latest dashboards, data visualization techniques, and analytics insights delivered to your inbox.</p>
+                <form class="flex flex-col sm:flex-row justify-center gap-4">
+                    <input type="email" placeholder="Your email address" class="flex-grow max-w-md px-4 py-3 rounded-full border border-gold-300 dark:border-gold-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gold-500">
+                    <button class="bg-gold-600 hover:bg-gold-700 text-white px-6 py-3 rounded-full font-medium transition-colors whitespace-nowrap">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="text-sm mt-4 text-gold-500 dark:text-gold-300">We respect your privacy. Unsubscribe at any time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-800 pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-laptop-code text-2xl text-gold-500"></i>
+                        <h3 class="text-xl font-bold text-gold-600 dark:text-gold-400">TechSphere</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Exploring the intersection of data, software, and technology culture.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-gold-700 dark:text-gold-300">Explore</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Dashboards</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Templates</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Tutorials</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Tools</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-gold-700 dark:text-gold-300">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">About</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Careers</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gold-500 dark:hover:text-gold-400">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-gold-700 dark:text-gold-300">Subscribe</h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Get the latest dashboards and data insights delivered to your inbox.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gold-500 w-full">
+                        <button class="bg-gold-500 hover:bg-gold-600 text-white px-4 py-2 rounded-r-full">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 dark:border-gray-700 mt-12 pt-8 text-center text-gray-500 dark:text-gray-400">
+                <p>© 2023 TechSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chart.js for demo charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            updateCharts(); // Update charts when theme changes
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        // Category selection
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active-category', 'bg-gold-100', 'dark:bg-gold-900', 'text-gold-700', 'dark:text-gold-300'));
+                btn.classList.add('active-category', 'bg-gold-100', 'dark:bg-gold-900', 'text-gold-700', 'dark:text-gold-300');
+            });
+        });
+
+        // Demo charts
+        function createFeaturedChart1() {
+            const ctx = document.getElementById('featuredChart1');
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                    datasets: [{
+                        label: 'Tech Adoption',
+                        data: [65, 59, 80, 81],
+                        backgroundColor: isDark ? '#FFD85C' : '#FFD700',
+                        borderColor: isDark ? '#FFEEB8' : '#CCAC00',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: isDark ? '#D1D5DB' : '#4B5563'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: isDark ? '#D1D5DB' : '#4B5563'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createFeaturedChart2() {
+            const ctx = document.getElementById('featuredChart2');
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Growth Rate',
+                        data: [12, 19, 15, 27, 34, 42],
+                        fill: false,
+                        borderColor: isDark ? '#FFD85C' : '#FFD700',
+                        tension: 0.4,
+                        pointBackgroundColor: isDark ? '#FFEEB8' : '#FFF9E6',
+                        pointBorderColor: isDark ? '#FFD85C' : '#FFD700',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: isDark ? '#D1D5DB' : '#4B5563'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: isDark ? '#D1D5DB' : '#4B5563'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize charts
+        let featuredChart1 = createFeaturedChart1();
+        let featuredChart2 = createFeaturedChart2();
+
+        // Update charts when theme changes
+        function updateCharts() {
+            featuredChart1.destroy();
+            featuredChart2.destroy();
+            featuredChart1 = createFeaturedChart1();
+            featuredChart2 = createFeaturedChart2();
+        }
+
+        // Tooltip functionality
+        const tooltips = document.querySelectorAll('.tooltip');
+        tooltips.forEach(tooltip => {
+            tooltip.addEventListener('mouseenter', () => {
+                const tooltipText = tooltip.querySelector('.tooltip-text');
+                tooltipText.style.visibility = 'visible';
+                tooltipText.style.opacity = '1';
+            });
+            tooltip.addEventListener('mouseleave', () => {
+                const tooltipText = tooltip.querySelector('.tooltip-text');
+                tooltipText.style.visibility = 'hidden';
+                tooltipText.style.opacity = '0';
+            });
+        });
+    </script>
+</body>
+</html>
