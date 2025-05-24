@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe | TechSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        tech: {
+                            100: '#E6F7FF',
+                            200: '#BAE3FF',
+                            300: '#7CC4FA',
+                            400: '#47A3F3',
+                            500: '#2186EB', // Primary tech blue
+                            600: '#0967D2',
+                            700: '#0552B5',
+                            800: '#03449E',
+                            900: '#01337D',
+                        },
+                        dark: {
+                            800: '#1A1A1A',
+                            900: '#0D0D0D'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .auth-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .auth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(33, 134, 235, 0.15);
+        }
+        .dark .auth-card:hover {
+            box-shadow: 0 10px 25px rgba(33, 134, 235, 0.3);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #2186EB;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .floating-shape {
+            animation: float 6s ease-in-out infinite;
+        }
+        .floating-shape.delay-1 {
+            animation-delay: 1s;
+        }
+        .floating-shape.delay-2 {
+            animation-delay: 2s;
+        }
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(33, 134, 235, 0.3);
+        }
+        .toggle-form {
+            display: none;
+        }
+        .toggle-form.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .plan-card {
+            transition: all 0.3s ease;
+        }
+        .plan-card:hover {
+            transform: scale(1.03);
+        }
+        .feature-check {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: rgba(33, 134, 235, 0.1);
+            margin-right: 8px;
+        }
+        .feature-check i {
+            font-size: 12px;
+            color: #2186EB;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-dark-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-dark-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-laptop-code text-3xl text-tech-500"></i>
+                    <h1 class="text-2xl font-bold text-tech-600 dark:text-tech-400">TechSphere</h1>
+                </div>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link font-medium">Home</a>
+                    <a href="articles.html" class="nav-link font-medium">Articles</a>
+                    <a href="dashboards.html" class="nav-link font-medium">Dashboards</a>
+                    <a href="podcasts.html" class="nav-link font-medium">Podcasts</a>
+                    <a href="about.html" class="nav-link font-medium">About</a>
+                    <a href="contact.html" class="nav-link font-medium">Contact</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="mode-toggle p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-tech-600 dark:text-tech-400">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button id="authButton" class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-2 rounded-full font-medium transition-colors">
+                        <i class="fas fa-user mr-2"></i> Sign In
+                    </button>
+                    <button class="md:hidden p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-tech-700 dark:text-tech-300">Welcome Back</h2>
+                    <button id="closeAuthModal" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+                    <button class="auth-tab active px-4 py-2 font-medium text-tech-600 dark:text-tech-400 border-b-2 border-tech-500" data-tab="login">Sign In</button>
+                    <button class="auth-tab px-4 py-2 font-medium text-gray-500 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400" data-tab="register">Create Account</button>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="loginForm" class="toggle-form active">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="loginEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                            <input type="email" id="loginEmail" name="email" required class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:border-tech-500 dark:focus:border-tech-500 bg-white dark:bg-gray-800 transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label for="loginPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                            <input type="password" id="loginPassword" name="password" required class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:border-tech-500 dark:focus:border-tech-500 bg-white dark:bg-gray-800 transition-colors">
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="rememberMe" name="remember" class="h-4 w-4 text-tech-500 focus:ring-tech-500 border-gray-300 dark:border-gray-700 rounded">
+                                <label for="rememberMe" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                                    Remember me
+                                </label>
+                            </div>
+                            <a href="#" class="text-sm text-tech-500 dark:text-tech-400 hover:underline">Forgot password?</a>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-tech-500 hover:bg-tech-600 text-white px-6 py-3 rounded-lg font-medium transition-colors mt-4">
+                            Sign In <i class="fas fa-sign-in-alt ml-2"></i>
+                        </button>
+                        
+                        <div class="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
+                            Don't have an account? <button type="button" class="text-tech-500 dark:text-tech-400 hover:underline auth-switch" data-tab="register">Sign up</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- Register Form -->
+                <form id="registerForm" class="toggle-form">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="registerName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+                            <input type="text" id="registerName" name="name" required class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:border-tech-500 dark:focus:border-tech-500 bg-white dark:bg-gray-800 transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label for="registerEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                            <input type="email" id="registerEmail" name="email" required class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:border-tech-500 dark:focus:border-tech-500 bg-white dark:bg-gray-800 transition-colors">
+                        </div>
+                        
+                        <div>
+                            <label for="registerPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                            <input type="password" id="registerPassword" name="password" required class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:border-tech-500 dark:focus:border-tech-500 bg-white dark:bg-gray-800 transition-colors">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">At least 8 characters with 1 number</p>
+                        </div>
+                        
+                        <div>
+                            <label for="registerConfirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirm Password</label>
+                            <input type="password" id="registerConfirmPassword" name="confirm_password" required class="form-input w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:border-tech-500 dark:focus:border-tech-500 bg-white dark:bg-gray-800 transition-colors">
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <input type="checkbox" id="acceptTerms" name="terms" required class="h-4 w-4 text-tech-500 focus:ring-tech-500 border-gray-300 dark:border-gray-700 rounded">
+                            <label for="acceptTerms" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                                I agree to the <a href="#" class="text-tech-500 dark:text-tech-400 hover:underline">Terms of Service</a> and <a href="#" class="text-tech-500 dark:text-tech-400 hover:underline">Privacy Policy</a>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-tech-500 hover:bg-tech-600 text-white px-6 py-3 rounded-lg font-medium transition-colors mt-4">
+                            Create Account <i class="fas fa-user-plus ml-2"></i>
+                        </button>
+                        
+                        <div class="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">
+                            Already have an account? <button type="button" class="text-tech-500 dark:text-tech-400 hover:underline auth-switch" data-tab="login">Sign in</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-r from-tech-100 to-white dark:from-tech-900 dark:to-dark-800 py-20">
+        <!-- Floating shapes -->
+        <div class="absolute top-20 left-10 w-16 h-16 rounded-full bg-tech-300/20 dark:bg-tech-700/20 floating-shape"></div>
+        <div class="absolute top-1/3 right-20 w-24 h-24 rounded-full bg-tech-400/20 dark:bg-tech-600/20 floating-shape delay-1"></div>
+        <div class="absolute bottom-20 left-1/4 w-20 h-20 rounded-full bg-tech-500/20 dark:bg-tech-500/20 floating-shape delay-2"></div>
+        
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center relative z-10">
+                <span class="inline-block bg-tech-500/10 text-tech-600 dark:text-tech-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    <i class="fas fa-crown mr-2"></i> Premium Access
+                </span>
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-tech-700 dark:text-tech-300">Unlock the Full TechSphere Experience</h1>
+                <p class="text-xl mb-8 text-gray-700 dark:text-gray-300">Get unlimited access to all our premium content, exclusive features, and ad-free browsing with a TechSphere subscription.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#plans" class="bg-tech-500 hover:bg-tech-600 text-white px-6 py-3 rounded-full font-medium transition-colors">
+                        <i class="fas fa-gem mr-2"></i> View Plans
+                    </a>
+                    <a href="#features" class="bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-tech-500 dark:text-tech-400 px-6 py-3 rounded-full font-medium transition-colors border border-tech-500 dark:border-tech-400">
+                        <i class="fas fa-star mr-2"></i> See Features
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">Premium Features</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">What you'll get with your TechSphere subscription</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="auth-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-newspaper text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Exclusive Articles</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">Access to premium articles, research papers, and in-depth analysis not available to free users.</p>
+                </div>
+                
+                <div class="auth-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-headphones text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Ad-Free Podcasts</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">Enjoy our tech podcasts without interruptions from advertisements.</p>
+                </div>
+                
+                <div class="auth-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Advanced Dashboards</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">Get access to premium data visualizations and customizable dashboards.</p>
+                </div>
+                
+                <div class="auth-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-download text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Download Content</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">Download articles, podcasts, and reports for offline access.</p>
+                </div>
+                
+                <div class="auth-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-comments text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Community Access</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">Join our exclusive member-only forums and discussion groups.</p>
+                </div>
+                
+                <div class="auth-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-bell text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Early Access</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">Be the first to try new features and provide feedback before public release.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Plans Section -->
+    <section id="plans" class="py-20 bg-tech-50 dark:bg-tech-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">Choose Your Plan</h2>
+                <p class="text-lg text-tech-600 dark:text-tech-400 max-w-2xl mx-auto">Flexible options to fit your needs and budget</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Basic Plan -->
+                <div class="plan-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                    <div class="p-8">
+                        <div class="flex items-center mb-4">
+                            <span class="inline-block bg-tech-100 dark:bg-tech-800 text-tech-600 dark:text-tech-400 px-3 py-1 rounded-full text-xs font-medium">
+                                Popular
+                            </span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 text-tech-600 dark:text-tech-400">Basic</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">Perfect for individuals who want essential access</p>
+                        
+                        <div class="mb-8">
+                            <span class="text-4xl font-bold text-gray-900 dark:text-white">$9</span>
+                            <span class="text-gray-600 dark:text-gray-400">/month</span>
+                        </div>
+                        
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Ad-free articles</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Basic dashboards</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Podcast archive</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Weekly newsletter</span>
+                            </li>
+                            <li class="flex items-center text-gray-400 dark:text-gray-500">
+                                <span class="feature-check bg-gray-100 dark:bg-gray-700">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                                <span>Premium content</span>
+                            </li>
+                            <li class="flex items-center text-gray-400 dark:text-gray-500">
+                                <span class="feature-check bg-gray-100 dark:bg-gray-700">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                                <span>Community access</span>
+                            </li>
+                        </ul>
+                        
+                        <button class="w-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-tech-500 dark:text-tech-400 px-6 py-3 rounded-lg font-medium transition-colors">
+                            Get Started
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Pro Plan -->
+                <div class="plan-card bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden border-2 border-tech-500 dark:border-tech-400 transform scale-105">
+                    <div class="p-8">
+                        <div class="flex items-center mb-4">
+                            <span class="inline-block bg-tech-500/10 text-tech-600 dark:text-tech-400 px-3 py-1 rounded-full text-xs font-medium">
+                                Best Value
+                            </span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2 text-tech-600 dark:text-tech-400">Pro</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">For professionals who need full access</p>
+                        
+                        <div class="mb-8">
+                            <span class="text-4xl font-bold text-gray-900 dark:text-white">$24</span>
+                            <span class="text-gray-600 dark:text-gray-400">/month</span>
+                        </div>
+                        
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Everything in Basic</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Premium articles</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Advanced dashboards</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Download content</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Community access</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Daily newsletter</span>
+                            </li>
+                        </ul>
+                        
+                        <button class="w-full bg-tech-500 hover:bg-tech-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                            Get Started
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Enterprise Plan -->
+                <div class="plan-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold mb-2 text-tech-600 dark:text-tech-400">Enterprise</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">For teams and organizations</p>
+                        
+                        <div class="mb-8">
+                            <span class="text-4xl font-bold text-gray-900 dark:text-white">$99</span>
+                            <span class="text-gray-600 dark:text-gray-400">/month</span>
+                        </div>
+                        
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Everything in Pro</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Team accounts (up to 10)</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Custom dashboards</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Priority support</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">API access</span>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="feature-check">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text-gray-700 dark:text-gray-300">Dedicated account manager</span>
+                            </li>
+                        </ul>
+                        
+                        <button class="w-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-tech-500 dark:text-tech-400 px-6 py-3 rounded-lg font-medium transition-colors">
+                            Contact Sales
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <p class="text-gray-600 dark:text-gray-400 mb-6">Need a custom solution? We offer tailored plans for large organizations.</p>
+                <a href="mailto:enterprise@techsphere.com" class="inline-block bg-tech-500 hover:bg-tech-600 text-white px-6 py-3 rounded-full font-medium transition-colors">
+                    <i class="fas fa-headset mr-2"></i> Enterprise Inquiry
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">What Our Members Say</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Join thousands of satisfied subscribers</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="auth-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mr-4">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Sarah K.</h4>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Product Manager</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 italic">"The premium dashboards have transformed how I track industry trends. Worth every penny for the data visualization tools alone."</p>
+                    <div class="mt-4 text-tech-500">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <div class="auth-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mr-4">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Michael T.</h4>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">CTO</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 italic">"Our entire engineering team uses TechSphere Pro. The research papers and technical deep dives are invaluable for staying ahead."</p>
+                    <div class="mt-4 text-tech-500">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <div class="auth-card bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mr-4">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Priya M.</h4>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Tech Journalist</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 italic">"I've discovered so many story ideas through the premium content. The community discussions are also a goldmine for insights."</p>
+                    <div class="mt-4 text-tech-500">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 bg-tech-50 dark:bg-tech-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">Frequently Asked Questions</h2>
+                <p class="text-lg text-tech-600 dark:text-tech-400 max-w-2xl mx-auto">Everything you need to know about TechSphere subscriptions</p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">What payment methods do you accept?</h3>
+                        <i class="fas fa-chevron-down text-tech-500 transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600 dark:text-gray-400">We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for annual subscriptions. All payments are processed securely through our PCI-compliant payment processor.</p>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">Can I cancel my subscription anytime?</h3>
+                        <i class="fas fa-chevron-down text-tech-500 transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600 dark:text-gray-400">Yes, you can cancel your subscription at any time. If you cancel during your billing period, you'll continue to have access until the end of that period. We don't offer refunds for partial months.</p>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">Is there a free trial available?</h3>
+                        <i class="fas fa-chevron-down text-tech-500 transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600 dark:text-gray-400">We occasionally offer free trials for new users. Currently, we have a 7-day free trial for our Pro plan. You can sign up without entering payment details, and you'll only be charged if you decide to continue after the trial period.</p>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">How do I upgrade or downgrade my plan?</h3>
+                        <i class="fas fa-chevron-down text-tech-500 transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600 dark:text-gray-400">You can change your plan at any time from your account settings. When upgrading, you'll be charged a prorated amount for the remaining days in your billing cycle. Downgrades take effect at your next billing date.</p>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">Do you offer discounts for students or non-profits?</h3>
+                        <i class="fas fa-chevron-down text-tech-500 transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-600 dark:text-gray-400">Yes, we offer a 50% discount for verified students and academic institutions, as well as for registered non-profit organizations. Please contact our support team with proof of eligibility to receive your discount code.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-tech-500 to-tech-700">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-6 text-white">Ready to Join TechSphere?</h2>
+                <p class="text-xl mb-8 text-tech-100">Start your subscription today and unlock the full potential of our tech platform.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button id="finalSignUp" class="bg-white hover:bg-gray-100 text-tech-600 px-6 py-3 rounded-full font-medium transition-colors">
+                        <i class="fas fa-user-plus mr-2"></i> Create Free Account
+                    </button>
+                    <a href="#plans" class="bg-tech-700 hover:bg-tech-800 text-white px-6 py-3 rounded-full font-medium transition-colors border border-white">
+                        <i class="fas fa-gem mr-2"></i> View Pricing Plans
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-800 pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-laptop-code text-2xl text-tech-500"></i>
+                        <h3 class="text-xl font-bold text-tech-600 dark:text-tech-400">TechSphere</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Exploring the intersection of technology, innovation, and culture through podcasts.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Articles</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Podcasts</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Dashboards</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Newsletter</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Events</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">About</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Careers</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Subscribe</h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Get the latest tech insights delivered to your inbox.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-tech-500 w-full">
+                        <button class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-2 rounded-r-full">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 dark:border-gray-700 mt-12 pt-8 text-center text-gray-500 dark:text-gray-400">
+                <p>© 2023 TechSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        // Auth modal functionality
+        const authModal = document.getElementById('authModal');
+        const authButton = document.getElementById('authButton');
+        const closeAuthModal = document.getElementById('closeAuthModal');
+        const finalSignUp = document.getElementById('finalSignUp');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const authForms = document.querySelectorAll('.toggle-form');
+        const authSwitches = document.querySelectorAll('.auth-switch');
+
+        // Toggle auth modal
+        function toggleAuthModal() {
+            authModal.classList.toggle('hidden');
+            authModal.classList.toggle('flex');
+        }
+
+        // Open modal when clicking auth button
+        authButton.addEventListener('click', toggleAuthModal);
+        finalSignUp.addEventListener('click', toggleAuthModal);
+
+        // Close modal when clicking close button or outside modal
+        closeAuthModal.addEventListener('click', toggleAuthModal);
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                toggleAuthModal();
+            }
+        });
+
+        // Switch between login and register tabs
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.getAttribute('data-tab');
+                
+                // Update active tab
+                authTabs.forEach(t => {
+                    t.classList.remove('active', 'text-tech-600', 'dark:text-tech-400', 'border-tech-500');
+                    t.classList.add('text-gray-500', 'dark:text-gray-400');
+                });
+                tab.classList.add('active', 'text-tech-600', 'dark:text-tech-400', 'border-tech-500');
+                tab.classList.remove('text-gray-500', 'dark:text-gray-400');
+                
+                // Show corresponding form
+                authForms.forEach(form => {
+                    form.classList.remove('active');
+                    if (form.id === `${tabName}Form`) {
+                        form.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Switch forms using the links below forms
+        authSwitches.forEach(switcher => {
+            switcher.addEventListener('click', () => {
+                const tabName = switcher.getAttribute('data-tab');
+                const tabToActivate = document.querySelector(`.auth-tab[data-tab="${tabName}"]`);
+                tabToActivate.click();
+            });
+        });
+
+        // Form submission handling
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Here you would typically validate and send login data to your server
+            // For this example, we'll simulate a successful login
+            authButton.innerHTML = '<i class="fas fa-user-circle mr-2"></i> My Account';
+            authButton.classList.remove('bg-tech-500', 'hover:bg-tech-600');
+            authButton.classList.add('bg-gray-100', 'dark:bg-gray-700', 'hover:bg-gray-200', 'dark:hover:bg-gray-600', 'text-tech-500', 'dark:text-tech-400');
+            
+            // Add logout functionality
+            authButton.onclick = function() {
+                // Here you would typically handle logout
+                // For this example, we'll just reset the button
+                authButton.innerHTML = '<i class="fas fa-user mr-2"></i> Sign In';
+                authButton.classList.add('bg-tech-500', 'hover:bg-tech-600', 'text-white');
+                authButton.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'hover:bg-gray-200', 'dark:hover:bg-gray-600', 'text-tech-500', 'dark:text-tech-400');
+                authButton.onclick = toggleAuthModal;
+                alert('You have been logged out successfully.');
+            };
+            
+            toggleAuthModal();
+            alert('Login successful! Welcome back to TechSphere.');
+        });
+
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Here you would typically validate and send registration data to your server
+            // For this example, we'll simulate a successful registration
+            document.querySelector('.auth-tab[data-tab="login"]').click();
+            alert('Registration successful! Please sign in with your new credentials.');
+        });
+
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('i');
+                
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animation for cards when they come into view
+        const cards = document.querySelectorAll('.auth-card, .plan-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        cards.forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
