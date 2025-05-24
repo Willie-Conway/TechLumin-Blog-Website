@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | TechSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        tech: {
+                            100: '#E6F7FF',
+                            200: '#BAE3FF',
+                            300: '#7CC4FA',
+                            400: '#47A3F3',
+                            500: '#2186EB', // Primary tech blue
+                            600: '#0967D2',
+                            700: '#0552B5',
+                            800: '#03449E',
+                            900: '#01337D',
+                        },
+                        dark: {
+                            800: '#1A1A1A',
+                            900: '#0D0D0D'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .team-card:hover .team-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .team-card:hover img {
+            transform: scale(1.03);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #2186EB;
+            border: 3px solid white;
+        }
+        .dark .timeline-item::before {
+            border-color: #1A1A1A;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(33, 134, 235, 0.1);
+        }
+        .dark .stat-card:hover {
+            box-shadow: 0 10px 25px rgba(33, 134, 235, 0.2);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #2186EB;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .floating-shape {
+            animation: float 6s ease-in-out infinite;
+        }
+        .floating-shape.delay-1 {
+            animation-delay: 1s;
+        }
+        .floating-shape.delay-2 {
+            animation-delay: 2s;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-dark-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-dark-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-laptop-code text-3xl text-tech-500"></i>
+                    <h1 class="text-2xl font-bold text-tech-600 dark:text-tech-400">TechSphere</h1>
+                </div>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link font-medium">Home</a>
+                    <a href="articles.html" class="nav-link font-medium">Articles</a>
+                    <a href="dashboards.html" class="nav-link font-medium">Dashboards</a>
+                    <a href="podcasts.html" class="nav-link font-medium">Podcasts</a>
+                    <a href="about.html" class="nav-link font-medium active">About</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="themeToggle" class="mode-toggle p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-tech-600 dark:text-tech-400">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-2 rounded-full font-medium transition-colors">
+                        Contact
+                    </button>
+                    <button class="md:hidden p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-r from-tech-100 to-white dark:from-tech-900 dark:to-dark-800 py-20">
+        <!-- Floating shapes -->
+        <div class="absolute top-20 left-10 w-16 h-16 rounded-full bg-tech-300/20 dark:bg-tech-700/20 floating-shape"></div>
+        <div class="absolute top-1/3 right-20 w-24 h-24 rounded-full bg-tech-400/20 dark:bg-tech-600/20 floating-shape delay-1"></div>
+        <div class="absolute bottom-20 left-1/4 w-20 h-20 rounded-full bg-tech-500/20 dark:bg-tech-500/20 floating-shape delay-2"></div>
+        
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center relative z-10">
+                <span class="inline-block bg-tech-500/10 text-tech-600 dark:text-tech-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    <i class="fas fa-rocket mr-2"></i> Innovating Since 2015
+                </span>
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-tech-700 dark:text-tech-300">Empowering the Tech Community</h1>
+                <p class="text-xl mb-8 text-gray-700 dark:text-gray-300">TechSphere is a platform dedicated to exploring the intersection of technology, innovation, and human potential through insightful content and community engagement.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#mission" class="bg-tech-500 hover:bg-tech-600 text-white px-6 py-3 rounded-full font-medium transition-colors">
+                        Our Mission
+                    </a>
+                    <a href="#team" class="bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-tech-500 dark:text-tech-400 px-6 py-3 rounded-full font-medium transition-colors border border-tech-500 dark:border-tech-400">
+                        Meet The Team
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section id="mission" class="py-20 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2 relative">
+                    <div class="relative rounded-2xl overflow-hidden shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="TechSphere Team" class="w-full h-auto">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-6 text-white">
+                            <h3 class="text-xl font-bold">Our Founding Team</h3>
+                            <p class="text-tech-200">2015 - Present</p>
+                        </div>
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-tech-500 rounded-xl shadow-lg flex items-center justify-center text-white">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold">8+</div>
+                            <div class="text-sm">Years</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl font-bold mb-6 text-tech-700 dark:text-tech-300">Our Mission & Vision</h2>
+                    <p class="text-lg mb-6 text-gray-600 dark:text-gray-300">At TechSphere, we believe technology should be accessible, understandable, and beneficial to everyone. Our mission is to bridge the gap between complex technological concepts and everyday understanding.</p>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-8 h-8 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500">
+                                    <i class="fas fa-bullseye"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">Democratizing Tech Knowledge</h3>
+                                <p class="text-gray-600 dark:text-gray-400">Making cutting-edge technology understandable for everyone, regardless of their technical background.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-8 h-8 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">Fostering Innovation</h3>
+                                <p class="text-gray-600 dark:text-gray-400">Creating a platform where ideas can be shared, discussed, and developed into real-world solutions.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-8 h-8 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="font-semibold text-lg text-tech-600 dark:text-tech-400">Building Community</h3>
+                                <p class="text-gray-600 dark:text-gray-400">Connecting technologists, entrepreneurs, and curious minds to collaborate and grow together.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-tech-50 dark:bg-tech-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">By The Numbers</h2>
+                <p class="text-lg text-tech-600 dark:text-tech-400 max-w-2xl mx-auto">Our impact in the tech community through content, engagement, and education.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="stat-card bg-white dark:bg-gray-800 rounded-xl p-8 text-center shadow-md transition-all duration-300">
+                    <div class="text-5xl font-bold text-tech-500 mb-3">250K+</div>
+                    <h3 class="text-xl font-semibold mb-2">Monthly Readers</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Engaging with our content across platforms</p>
+                </div>
+                <div class="stat-card bg-white dark:bg-gray-800 rounded-xl p-8 text-center shadow-md transition-all duration-300">
+                    <div class="text-5xl font-bold text-tech-500 mb-3">1M+</div>
+                    <h3 class="text-xl font-semibold mb-2">Podcast Downloads</h3>
+                    <p class="text-gray-600 dark:text-gray-400">For our tech conversations and interviews</p>
+                </div>
+                <div class="stat-card bg-white dark:bg-gray-800 rounded-xl p-8 text-center shadow-md transition-all duration-300">
+                    <div class="text-5xl font-bold text-tech-500 mb-3">50+</div>
+                    <h3 class="text-xl font-semibold mb-2">Industry Experts</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Featured in our content annually</p>
+                </div>
+                <div class="stat-card bg-white dark:bg-gray-800 rounded-xl p-8 text-center shadow-md transition-all duration-300">
+                    <div class="text-5xl font-bold text-tech-500 mb-3">12</div>
+                    <h3 class="text-xl font-semibold mb-2">Team Members</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Dedicated to delivering quality content</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-20 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">Meet The Team</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">The passionate individuals behind TechSphere's vision and daily operations.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Team Member 1 -->
+                <div class="team-card relative rounded-xl overflow-hidden shadow-lg transition-all duration-300">
+                    <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Team Member" class="w-full h-80 object-cover transition-transform duration-500">
+                    <div class="team-overlay absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6 opacity-0 transform translate-y-5 transition-all duration-300">
+                        <h3 class="text-xl font-bold text-white">Sarah Johnson</h3>
+                        <p class="text-tech-300 mb-4">CEO & Founder</p>
+                        <p class="text-gray-200 mb-4">Former Google PM turned tech evangelist with a passion for education.</p>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="team-card relative rounded-xl overflow-hidden shadow-lg transition-all duration-300">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Team Member" class="w-full h-80 object-cover transition-transform duration-500">
+                    <div class="team-overlay absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6 opacity-0 transform translate-y-5 transition-all duration-300">
+                        <h3 class="text-xl font-bold text-white">Michael Chen</h3>
+                        <p class="text-tech-300 mb-4">CTO</p>
+                        <p class="text-gray-200 mb-4">Ex-Microsoft architect with deep expertise in cloud technologies.</p>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="team-card relative rounded-xl overflow-hidden shadow-lg transition-all duration-300">
+                    <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Team Member" class="w-full h-80 object-cover transition-transform duration-500">
+                    <div class="team-overlay absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6 opacity-0 transform translate-y-5 transition-all duration-300">
+                        <h3 class="text-xl font-bold text-white">Lisa Rodriguez</h3>
+                        <p class="text-tech-300 mb-4">Content Director</p>
+                        <p class="text-gray-200 mb-4">Tech journalist with 10+ years experience at Wired and The Verge.</p>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 4 -->
+                <div class="team-card relative rounded-xl overflow-hidden shadow-lg transition-all duration-300">
+                    <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Team Member" class="w-full h-80 object-cover transition-transform duration-500">
+                    <div class="team-overlay absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6 opacity-0 transform translate-y-5 transition-all duration-300">
+                        <h3 class="text-xl font-bold text-white">David Park</h3>
+                        <p class="text-tech-300 mb-4">Podcast Producer</p>
+                        <p class="text-gray-200 mb-4">Audio engineer turned tech podcaster with a knack for great interviews.</p>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="text-white hover:text-tech-300">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block bg-tech-500 hover:bg-tech-600 text-white px-6 py-3 rounded-full font-medium transition-colors">
+                    View Full Team <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-20 bg-tech-50 dark:bg-tech-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">Our Journey</h2>
+                <p class="text-lg text-tech-600 dark:text-tech-400 max-w-2xl mx-auto">Key milestones in TechSphere's evolution from startup to industry leader.</p>
+            </div>
+            
+            <div class="relative max-w-3xl mx-auto">
+                <!-- Timeline line -->
+                <div class="absolute left-4 md:left-1/2 h-full w-0.5 bg-tech-200 dark:bg-tech-700 transform -translate-x-1/2"></div>
+                
+                <div class="space-y-8">
+                    <!-- Timeline Item 1 -->
+                    <div class="relative pl-10 md:pl-0 md:flex justify-between timeline-item">
+                        <div class="md:w-5/12 md:pr-8 md:text-right mb-4 md:mb-0">
+                            <h3 class="text-xl font-bold text-tech-700 dark:text-tech-300">Founded TechSphere</h3>
+                            <p class="text-sm text-tech-500 dark:text-tech-400">June 2015</p>
+                        </div>
+                        <div class="md:w-5/12 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                            <p class="text-gray-600 dark:text-gray-400">Sarah Johnson launches TechSphere as a personal tech blog while working at Google, focusing on making complex tech concepts accessible.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Timeline Item 2 -->
+                    <div class="relative pl-10 md:pl-0 md:flex justify-between timeline-item">
+                        <div class="md:w-5/12 md:order-last md:pl-8">
+                            <h3 class="text-xl font-bold text-tech-700 dark:text-tech-300">First Podcast Episode</h3>
+                            <p class="text-sm text-tech-500 dark:text-tech-400">March 2017</p>
+                        </div>
+                        <div class="md:w-5/12 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md md:order-first">
+                            <p class="text-gray-600 dark:text-gray-400">TechSphere Podcast launches with an interview featuring a former colleague discussing cloud computing trends.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Timeline Item 3 -->
+                    <div class="relative pl-10 md:pl-0 md:flex justify-between timeline-item">
+                        <div class="md:w-5/12 md:pr-8 md:text-right mb-4 md:mb-0">
+                            <h3 class="text-xl font-bold text-tech-700 dark:text-tech-300">First Full-Time Hire</h3>
+                            <p class="text-sm text-tech-500 dark:text-tech-400">January 2018</p>
+                        </div>
+                        <div class="md:w-5/12 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                            <p class="text-gray-600 dark:text-gray-400">Michael Chen joins as CTO, allowing TechSphere to expand beyond blog content into interactive dashboards and tools.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Timeline Item 4 -->
+                    <div class="relative pl-10 md:pl-0 md:flex justify-between timeline-item">
+                        <div class="md:w-5/12 md:order-last md:pl-8">
+                            <h3 class="text-xl font-bold text-tech-700 dark:text-tech-300">1M Monthly Readers</h3>
+                            <p class="text-sm text-tech-500 dark:text-tech-400">October 2020</p>
+                        </div>
+                        <div class="md:w-5/12 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md md:order-first">
+                            <p class="text-gray-600 dark:text-gray-400">TechSphere reaches major traffic milestone during pandemic as more people turn to online tech education.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Timeline Item 5 -->
+                    <div class="relative pl-10 md:pl-0 md:flex justify-between timeline-item">
+                        <div class="md:w-5/12 md:pr-8 md:text-right mb-4 md:mb-0">
+                            <h3 class="text-xl font-bold text-tech-700 dark:text-tech-300">Series A Funding</h3>
+                            <p class="text-sm text-tech-500 dark:text-tech-400">May 2022</p>
+                        </div>
+                        <div class="md:w-5/12 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                            <p class="text-gray-600 dark:text-gray-400">Secures $8M in funding to expand team and develop new interactive learning platforms.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="py-20 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-tech-700 dark:text-tech-300">Our Core Values</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">The principles that guide everything we do at TechSphere.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-unlock-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Accessibility</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">We believe tech knowledge should be available to everyone, regardless of background or experience level.</p>
+                </div>
+                <div class="bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-lightbulb text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Innovation</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">We constantly explore new ways to present and explain technology to our audience.</p>
+                </div>
+                <div class="bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-hands-helping text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Community</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">We foster connections between tech professionals and enthusiasts to learn from each other.</p>
+                </div>
+                <div class="bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Growth</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">We're committed to the continuous development of our team, content, and community.</p>
+                </div>
+                <div class="bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-balance-scale text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Integrity</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">We maintain honesty and transparency in all our content and business practices.</p>
+                </div>
+                <div class="bg-tech-50 dark:bg-gray-700 rounded-xl p-8">
+                    <div class="w-16 h-16 rounded-full bg-tech-100 dark:bg-tech-900 flex items-center justify-center text-tech-500 mb-6 mx-auto">
+                        <i class="fas fa-laugh-beam text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-3 text-tech-600 dark:text-tech-400">Fun</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">We believe learning about technology should be engaging, enjoyable, and even exciting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-tech-500 to-tech-700">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-6 text-white">Join Our Tech Community</h2>
+                <p class="text-xl mb-8 text-tech-100">Whether you're a tech enthusiast, professional, or just curious about technology, there's a place for you at TechSphere.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="subscribe.html" class="bg-white hover:bg-gray-100 text-tech-600 px-6 py-3 rounded-full font-medium transition-colors">
+                        <i class="fas fa-users mr-2"></i> Join Community
+                    </a>
+                    <a href="contact.html" class="bg-tech-600 hover:bg-tech-700 text-white px-6 py-3 rounded-full font-medium transition-colors border border-white/20">
+                        <i class="fas fa-envelope mr-2"></i> Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-800 pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-laptop-code text-2xl text-tech-500"></i>
+                        <h3 class="text-xl font-bold text-tech-600 dark:text-tech-400">TechSphere</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Exploring the intersection of technology, innovation, and culture through podcasts.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Articles</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Podcasts</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Dashboards</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Newsletter</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Events</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">About</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Careers</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-tech-500 dark:hover:text-tech-400">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-tech-700 dark:text-tech-300">Subscribe</h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Get the latest tech insights delivered to your inbox.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-tech-500 w-full">
+                        <button class="bg-tech-500 hover:bg-tech-600 text-white px-4 py-2 rounded-r-full">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 dark:border-gray-700 mt-12 pt-8 text-center text-gray-500 dark:text-gray-400">
+                <p>© 2023 TechSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animation for stats when they come into view
+        const statCards = document.querySelectorAll('.stat-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        statCards.forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
