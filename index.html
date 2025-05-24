@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechLumin | Data & Software Culture</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -1058,5 +1060,1048 @@
                                 <canvas id="languageChart"></canvas>
                             </div>
                             <div class="mt-4 flex justify-center space-x-4">
-                                <button class="bg-gold-500 hover:bg-gold
+                                <button class="bg-gold-500 hover:bg-gold-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
+                                    <i class="fas fa-download mr-2"></i> Download Data
+                                </button>
+                                <button class="border-2 border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-white font-bold py-2 px-4 rounded-full transition duration-300">
+                                    <i class="fas fa-share-alt mr-2"></i> Share
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gold-50 dark:bg-slate-800 rounded-xl p-6 shadow-md">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Cloud Provider Market Share</h3>
+                            <div class="chart-container">
+                                <canvas id="cloudChart"></canvas>
+                            </div>
+                            <div class="mt-4 flex justify-center space-x-4">
+                                <button class="bg-gold-500 hover:bg-gold-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
+                                    <i class="fas fa-download mr-2"></i> Download Data
+                                </button>
+                                <button class="border-2 border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-white font-bold py-2 px-4 rounded-full transition duration-300">
+                                    <i class="fas fa-share-alt mr-2"></i> Share
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md">
+                        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-4">Tech Adoption Trends</h3>
+                        <div class="chart-container" style="height: 400px;">
+                            <canvas id="trendsChart"></canvas>
+                        </div>
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-gold-50 dark:bg-slate-700 p-4 rounded-lg">
+                                <h4 class="font-bold text-gray-800 dark:text-white mb-2">Filters</h4>
+                                <select class="w-full bg-white dark:bg-slate-600 border border-gray-300 dark:border-slate-500 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500 mb-2">
+                                    <option>All Industries</option>
+                                    <option>Technology</option>
+                                    <option>Finance</option>
+                                    <option>Healthcare</option>
+                                </select>
+                                <select class="w-full bg-white dark:bg-slate-600 border border-gray-300 dark:border-slate-500 rounded-lg py-2 px-3 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500">
+                                    <option>Last 12 Months</option>
+                                    <option>Last 3 Years</option>
+                                    <option>Last 5 Years</option>
+                                </select>
+                            </div>
+                            <div class="bg-gold-50 dark:bg-slate-700 p-4 rounded-lg">
+                                <h4 class="font-bold text-gray-800 dark:text-white mb-2">Metrics</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox text-gold-500 rounded border-gray-300 dark:border-slate-500 focus:ring-gold-500" checked>
+                                        <span class="ml-2 text-gray-800 dark:text-white">Adoption Rate</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox text-gold-500 rounded border-gray-300 dark:border-slate-500 focus:ring-gold-500" checked>
+                                        <span class="ml-2 text-gray-800 dark:text-white">Investment Growth</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="form-checkbox text-gold-500 rounded border-gray-300 dark:border-slate-500 focus:ring-gold-500">
+                                        <span class="ml-2 text-gray-800 dark:text-white">Job Postings</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="bg-gold-50 dark:bg-slate-700 p-4 rounded-lg flex flex-col justify-between">
+                                <div>
+                                    <h4 class="font-bold text-gray-800 dark:text-white mb-2">Export</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Download the complete dataset or share the visualization.</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="flex-1 bg-gold-500 hover:bg-gold-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
+                                        <i class="fas fa-file-csv mr-2"></i> CSV
+                                    </button>
+                                    <button class="flex-1 border-2 border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-white font-bold py-2 px-4 rounded-full transition duration-300">
+                                        <i class="fas fa-image mr-2"></i> PNG
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Topics Page -->
+        <div id="topics" class="page">
+            <section class="py-16 bg-white dark:bg-slate-900">
+                <div class="container mx-auto px-4">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Browse by <span class="text-gold-500">Topics</span></h2>
+                        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mt-4">Explore in-depth content organized by technology categories</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                            <div class="relative h-48 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                                     alt="Data Engineering" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                                    <h3 class="text-2xl font-bold text-white">Data Engineering</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Explore the latest in data pipelines, ETL processes, and data infrastructure.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">24 Articles</span>
+                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('topic-detail')">View All</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                            <div class="relative h-48 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80" 
+                                     alt="AI/ML" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                                    <h3 class="text-2xl font-bold text-white">Artificial Intelligence</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Discover insights on machine learning, deep learning, and AI applications.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">32 Articles</span>
+                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('topic-detail')">View All</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                            <div class="relative h-48 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1555774698-0f77b0d5c7a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                                     alt="Cloud Computing" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                                    <h3 class="text-2xl font-bold text-white">Cloud Computing</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Learn about cloud architectures, serverless, and multi-cloud strategies.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">18 Articles</span>
+                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('topic-detail')">View All</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                            <div class="relative h-48 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1617791160536-598cf32026fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80" 
+                                     alt="Software Development" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                                    <h3 class="text-2xl font-bold text-white">Software Engineering</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Modern development practices, architecture patterns, and engineering culture.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">27 Articles</span>
+                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('topic-detail')">View All</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                            <div class="relative h-48 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80" 
+                                     alt="DevOps" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                                    <h3 class="text-2xl font-bold text-white">DevOps & SRE</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">CI/CD, observability, and site reliability engineering best practices.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">15 Articles</span>
+                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('topic-detail')">View All</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                            <div class="relative h-48 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                                     alt="Cybersecurity" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+                                    <h3 class="text-2xl font-bold text-white">Cybersecurity</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-gray-600 dark:text-gray-300 mb-4">Security best practices, threat modeling, and zero trust architecture.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">12 Articles</span>
+                                    <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('topic-detail')">View All</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Login Page -->
+        <div id="login" class="page">
+            <section class="py-16 bg-gold-50 dark:bg-slate-800">
+                <div class="container mx-auto px-4">
+                    <div class="max-w-md mx-auto bg-white dark:bg-slate-700 rounded-xl shadow-md overflow-hidden p-8">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Welcome Back</h2>
+                            <p class="text-gray-600 dark:text-gray-300 mt-2">Sign in to access your account</p>
+                        </div>
+                        
+                        <form class="space-y-6">
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-800 dark:text-white mb-1">Email Address</label>
+                                <input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" placeholder="your@email.com">
+                            </div>
+                            
+                            <div>
+                                <label for="password" class="block text-sm font-medium text-gray-800 dark:text-white mb-1">Password</label>
+                                <input type="password" id="password" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" placeholder="••••••••">
+                                <div class="flex justify-end mt-2">
+                                    <a href="#" class="text-sm text-gold-500 hover:text-gold-600">Forgot password?</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <input type="checkbox" id="remember" class="form-checkbox h-4 w-4 text-gold-500 rounded border-gray-300 dark:border-slate-500 focus:ring-gold-500">
+                                <label for="remember" class="ml-2 block text-sm text-gray-800 dark:text-white">Remember me</label>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-gold-500 hover:bg-gold-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                                Sign In
+                            </button>
+                            
+                            <div class="text-center">
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Don't have an account? <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('register')">Sign up</a></p>
+                            </div>
+                            
+                            <div class="relative mt-6">
+                                <div class="absolute inset-0 flex items-center">
+                                    <div class="w-full border-t border-gray-300 dark:border-slate-600"></div>
+                                </div>
+                                <div class="relative flex justify-center text-sm">
+                                    <span class="px-2 bg-white dark:bg-slate-700 text-gray-500 dark:text-gray-300">Or continue with</span>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mt-6">
+                                <button type="button" class="flex items-center justify-center py-2 px-4 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-gray-800 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-500 transition duration-300">
+                                    <i class="fab fa-google text-gold-500 mr-2"></i> Google
+                                </button>
+                                <button type="button" class="flex items-center justify-center py-2 px-4 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-600 text-gray-800 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-500 transition duration-300">
+                                    <i class="fab fa-github text-gold-500 mr-2"></i> GitHub
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Register Page -->
+        <div id="register" class="page">
+            <section class="py-16 bg-gold-50 dark:bg-slate-800">
+                <div class="container mx-auto px-4">
+                    <div class="max-w-md mx-auto bg-white dark:bg-slate-700 rounded-xl shadow-md overflow-hidden p-8">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Create Account</h2>
+                            <p class="text-gray-600 dark:text-gray-300 mt-2">Join our community of tech enthusiasts</p>
+                        </div>
+                        
+                        <form class="space-y-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="firstName" class="block text-sm font-medium text-gray-800 dark:text-white mb-1">First Name</label>
+                                    <input type="text" id="firstName" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" placeholder="John">
+                                </div>
+                                <div>
+                                    <label for="lastName" class="block text-sm font-medium text-gray-800 dark:text-white mb-1">Last Name</label>
+                                    <input type="text" id="lastName" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" placeholder="Doe">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="regEmail" class="block text-sm font-medium text-gray-800 dark:text-white mb-1">Email Address</label>
+                                <input type="email" id="regEmail" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" placeholder="your@email.com">
+                            </div>
+                            
+                            <div>
+                                <label for="regPassword" class="block text-sm font-medium text-gray-800 dark:text-white mb-1">Password</label>
+                                <input type="password" id="regPassword" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" placeholder="••••••••">
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Minimum 8 characters with at least one number</p>
+                            </div>
+                            
+                            <div>
+                                <label for="confirmPassword" class="block text-sm font-medium text-gray-800 dark:text-white mb-1">Confirm Password</label>
+                                <input type="password" id="confirmPassword" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" placeholder="••••••••">
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <input type="checkbox" id="terms" class="form-checkbox h-4 w-4 text-gold-500 rounded border-gray-300 dark:border-slate-500 focus:ring-gold-500">
+                                <label for="terms" class="ml-2 block text-sm text-gray-800 dark:text-white">I agree to the <a href="#" class="text-gold-500 hover:text-gold-600">Terms of Service</a> and <a href="#" class="text-gold-500 hover:text-gold-600">Privacy Policy</a></label>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-gold-500 hover:bg-gold-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                                Create Account
+                            </button>
+                            
+                            <div class="text-center">
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Already have an account? <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('login')">Sign in</a></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile" class="page">
+            <section class="py-16 bg-white dark:bg-slate-900">
+                <div class="container mx-auto px-4 max-w-4xl">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/3">
+                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md p-6 sticky top-6">
+                                <div class="flex flex-col items-center">
+                                    <div class="profile-avatar rounded-full bg-gold-100 dark:bg-gold-900 flex items-center justify-center text-gold-500 text-4xl font-bold mb-4">
+                                        <span id="profileInitial">U</span>
+                                    </div>
+                                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white text-center" id="profileName">User Name</h2>
+                                    <p class="text-gray-500 dark:text-gray-400 text-center mb-6" id="profileTitle">Member since June 2023</p>
+                                    
+                                    <div class="w-full space-y-4">
+                                        <button class="w-full flex items-center text-gray-800 dark:text-white hover:text-gold-500">
+                                            <i class="fas fa-user-circle mr-3"></i> Profile
+                                        </button>
+                                        <button class="w-full flex items-center text-gray-800 dark:text-white hover:text-gold-500">
+                                            <i class="fas fa-bookmark mr-3"></i> Saved Articles
+                                        </button>
+                                        <button class="w-full flex items-center text-gray-800 dark:text-white hover:text-gold-500">
+                                            <i class="fas fa-bell mr-3"></i> Notifications
+                                        </button>
+                                        <button class="w-full flex items-center text-gray-800 dark:text-white hover:text-gold-500">
+                                            <i class="fas fa-cog mr-3"></i> Settings
+                                        </button>
+                                        <button class="w-full flex items-center text-gray-800 dark:text-white hover:text-gold-500" onclick="logout()">
+                                            <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-2/3">
+                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md p-6 mb-6">
+                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-6">Personal Information</h2>
+                                
+                                <form class="space-y-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label for="profileFirstName" class="block text-sm font-medium text-gray-800 dark:text-white mb-1">First Name</label>
+                                            <input type="text" id="profileFirstName" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" value="John">
+                                        </div>
+                                        <div>
+                                            <label for="profileLastName" class="block text-sm font-medium text-gray-800 dark:text-white mb-1">Last Name</label>
+                                            <input type="text" id="profileLastName" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" value="Doe">
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="profileEmail" class="block text-sm font-medium text-gray-800 dark:text-white mb-1">Email Address</label>
+                                        <input type="email" id="profileEmail" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" value="john.doe@example.com">
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="profileBio" class="block text-sm font-medium text-gray-800 dark:text-white mb-1">Bio</label>
+                                        <textarea id="profileBio" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500">Data enthusiast and software engineer with a passion for building data-driven applications.</textarea>
+                                    </div>
+                                    
+                                    <div class="flex justify-end">
+                                        <button type="submit" class="bg-gold-500 hover:bg-gold-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                                            Save Changes
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md p-6">
+                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-6">Account Security</h2>
+                                
+                                <div class="space-y-6">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h3 class="font-medium text-gray-800 dark:text-white">Password</h3>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Last changed 3 months ago</p>
+                                        </div>
+                                        <button class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('change-password')">
+                                            Change
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h3 class="font-medium text-gray-800 dark:text-white">Two-Factor Authentication</h3>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Not enabled</p>
+                                        </div>
+                                        <button class="text-gold-500 hover:text-gold-600 font-medium">
+                                            Enable
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h3 class="font-medium text-gray-800 dark:text-white">Connected Devices</h3>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">2 devices active</p>
+                                        </div>
+                                        <button class="text-gold-500 hover:text-gold-600 font-medium">
+                                            Manage
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md p-6 mt-6">
+                                <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-6">Your Activity</h2>
+                                
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between p-4 bg-gold-50 dark:bg-slate-700 rounded-lg">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-gold-100 dark:bg-gold-900 flex items-center justify-center text-gold-500 mr-4">
+                                                <i class="fas fa-book-open"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-medium text-gray-800 dark:text-white">Articles Read</h3>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">24 this month</p>
+                                            </div>
+                                        </div>
+                                        <a href="#" class="text-gold-500 hover:text-gold-600 font-medium" onclick="showPage('articles')">View All</a>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between p-4 bg-gold-50 dark:bg-slate-700 rounded-lg">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-gold-100 dark:bg-gold-900 flex items-center justify-center text-gold-500 mr-4">
+                                                <i class="fas fa-bookmark"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-medium text-gray-800 dark:text-white">Saved Articles</h3>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">8 saved</p>
+                                            </div>
+                                        </div>
+                                        <a href="#" class="text-gold-500 hover:text-gold-600 font-medium">View All</a>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between p-4 bg-gold-50 dark:bg-slate-700 rounded-lg">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-gold-100 dark:bg-gold-900 flex items-center justify-center text-gold-500 mr-4">
+                                                <i class="fas fa-comment"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-medium text-gray-800 dark:text-white">Comments</h3>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400">5 discussions</p>
+                                            </div>
+                                        </div>
+                                        <a href="#" class="text-gold-500 hover:text-gold-600 font-medium">View All</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- New Article Page -->
+        <div id="new-article" class="page">
+            <section class="py-16 bg-white dark:bg-slate-900">
+                <div class="container mx-auto px-4 max-w-4xl">
+                    <div class="mb-8">
+                        <a href="#" class="text-gold-500 hover:text-gold-600 font-medium flex items-center" onclick="showPage('articles')">
+                            <i class="fas fa-arrow-left mr-2"></i> Back to Articles
+                        </a>
+                    </div>
+                    
+                    <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">Create New Article</h1>
+                    
+                    <form>
+                        <div class="mb-6">
+                            <label for="articleTitle" class="block text-sm font-medium text-gray-800 dark:text-white mb-2">Title</label>
+                            <input type="text" id="articleTitle" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" placeholder="Your article title">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="articleExcerpt" class="block text-sm font-medium text-gray-800 dark:text-white mb-2">Excerpt</label>
+                            <textarea id="articleExcerpt" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500" placeholder="Brief summary of your article"></textarea>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-800 dark:text-white mb-2">Featured Image</label>
+                            <div class="flex items-center justify-center w-full">
+                                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 dark:border-slate-600 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-slate-700 hover:bg-gray-100 dark:hover:bg-slate-600 transition duration-300">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <i class="fas fa-cloud-upload-alt text-3xl text-gray-500 dark:text-gray-400 mb-3"></i>
+                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG (MAX. 5MB)</p>
+                                    </div>
+                                    <input id="dropzone-file" type="file" class="hidden" />
+                                </label>
+                            </div> 
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="articleTopics" class="block text-sm font-medium text-gray-800 dark:text-white mb-2">Topics</label>
+                            <select id="articleTopics" multiple class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500">
+                                <option>Data Engineering</option>
+                                <option>AI/ML</option>
+                                <option>Cloud Computing</option>
+                                <option>Software Development</option>
+                                <option>DevOps</option>
+                                <option>Cybersecurity</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-800 dark:text-white mb-2">Content</label>
+                            <div class="editor-toolbar bg-gray-100 dark:bg-slate-700 p-2 flex flex-wrap gap-2">
+                                <button type="button" class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-200 dark:hover:bg-slate-600">
+                                    <i class="fas fa-bold text-gray-700 dark:text-gray-300"></i>
+                                </button>
+                                <button type="button" class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-200 dark:hover:bg-slate-600">
+                                    <i class="fas fa-italic text-gray-700 dark:text-gray-300"></i>
+                                </button>
+                                <button type="button" class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-200 dark:hover:bg-slate-600">
+                                    <i class="fas fa-underline text-gray-700 dark:text-gray-300"></i>
+                                </button>
+                                <div class="border-l border-gray-300 dark:border-slate-600 h-6 mx-1"></div>
+                                <button type="button" class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-200 dark:hover:bg-slate-600">
+                                    <i class="fas fa-heading text-gray-700 dark:text-gray-300"></i>
+                                </button>
+                                <button type="button" class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-200 dark:hover:bg-slate-600">
+                                    <i class="fas fa-list-ul text-gray-700 dark:text-gray-300"></i>
+                                </button>
+                                <button type="button" class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-200 dark:hover:bg-slate-600">
+                                    <i class="fas fa-list-ol text-gray-700 dark:text-gray-300"></i>
+                                </button>
+                                <div class="border-l border-gray-300 dark:border-slate-600 h-6 mx-1"></div>
+                                <button type="button" class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-200 dark:hover:bg-slate-600">
+                                    <i class="fas fa-link text-gray-700 dark:text-gray-300"></i>
+                                </button>
+                                <button type="button" class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-200 dark:hover:bg-slate-600">
+                                    <i class="fas fa-image text-gray-700 dark:text-gray-300"></i>
+                                </button>
+                                <button type="button" class="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-200 dark:hover:bg-slate-600">
+                                    <i class="fas fa-code text-gray-700 dark:text-gray-300"></i>
+                                </button>
+                            </div>
+                            <div class="editor-content">
+                                <textarea id="articleContent" rows="15" class="w-full px-4 py-3 focus:outline-none dark:bg-slate-700 dark:text-white" placeholder="Write your article content here..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <label for="articleStatus" class="block text-sm font-medium text-gray-800 dark:text-white mb-2">Status</label>
+                                <select id="articleStatus" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500">
+                                    <option>Draft</option>
+                                    <option>Published</option>
+                                </select>
+                            </div>
+                            <div class="space-x-4">
+                                <button type="button" class="border-2 border-gray-300 dark:border-slate-600 text-gray-800 dark:text-white font-bold py-2 px-6 rounded-lg transition duration-300 hover:bg-gray-100 dark:hover:bg-slate-600">
+                                    Save Draft
+                                </button>
+                                <button type="submit" class="bg-gold-500 hover:bg-gold-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                                    Publish
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="gold-gradient w-8 h-8 rounded-full flex items-center justify-center">
+                            <i class="fas fa-lightbulb text-white"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Tech<span class="text-gold-500">Lumin</span></h2>
+                    </div>
+                    <p class="text-gray-400 mb-4">Illuminating the future of technology through data and software insights.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Explore</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300" onclick="showPage('articles')">Articles</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300" onclick="showPage('dashboards')">Dashboards</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300" onclick="showPage('topics')">Topics</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300">Podcasts</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300">Newsletters</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Company</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-gold-500 transition duration-300">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Subscribe</h3>
+                    <p class="text-gray-400 mb-4">Get the latest articles and insights delivered to your inbox.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-lg focus:outline-none text-gray-800 w-full">
+                        <button type="submit" class="bg-gold-500 hover:bg-gold-600 text-white px-4 py-2 rounded-r-lg transition duration-300">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 TechLumin. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode toggle
+        const toggle = document.getElementById('toggle');
+        const html = document.documentElement;
+        
+        // Check for saved user preference or use system preference
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            toggle.checked = true;
+        }
+        
+        toggle.addEventListener('change', function() {
+            if (this.checked) {
+                html.classList.add('dark');
+                localStorage.setItem('darkMode', true);
+            } else {
+                html.classList.remove('dark');
+                localStorage.setItem('darkMode', false);
+            }
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // User dropdown menu
+        const userButton = document.getElementById('userButton');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        
+        if (userButton) {
+            userButton.addEventListener('click', function() {
+                dropdownMenu.classList.toggle('hidden');
+            });
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (dropdownMenu && !userButton.contains(event.target) ){
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+        
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Simulate login/logout
+        function login() {
+            document.getElementById('authButtons').style.display = 'none';
+            document.getElementById('userMenu').style.display = 'block';
+            document.getElementById('profileLink').style.display = 'block';
+            document.getElementById('mobileAuthButtons').style.display = 'none';
+            document.getElementById('mobileUserMenu').style.display = 'block';
+            document.getElementById('mobileProfileLink').style.display = 'block';
+            document.getElementById('newArticleBtn').classList.remove('hidden');
+        }
+        
+        function logout() {
+            document.getElementById('authButtons').style.display = 'block';
+            document.getElementById('userMenu').style.display = 'none';
+            document.getElementById('profileLink').style.display = 'none';
+            document.getElementById('mobileAuthButtons').style.display = 'block';
+            document.getElementById('mobileUserMenu').style.display = 'none';
+            document.getElementById('mobileProfileLink').style.display = 'none';
+            document.getElementById('newArticleBtn').classList.add('hidden');
+            showPage('home');
+        }
+        
+        // Comment form toggle
+        const addCommentBtn = document.getElementById('addCommentBtn');
+        const cancelCommentBtn = document.getElementById('cancelCommentBtn');
+        const commentForm = document.getElementById('commentForm');
+        
+        if (addCommentBtn) {
+            addCommentBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                commentForm.classList.toggle('hidden');
+            });
+        }
+        
+        if (cancelCommentBtn) {
+            cancelCommentBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                commentForm.classList.add('hidden');
+            });
+        }
+        
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Trend Chart
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            const trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [
+                        {
+                            label: 'AI Adoption',
+                            data: [45, 52, 58, 62, 67, 72],
+                            borderColor: '#FFD12E',
+                            backgroundColor: 'rgba(255, 209, 46, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Data Teams',
+                            data: [38, 42, 47, 51, 55, 58],
+                            borderColor: '#997D1A',
+                            backgroundColor: 'rgba(153, 125, 26, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Cloud Native',
+                            data: [50, 53, 56, 59, 62, 64],
+                            borderColor: '#E5BC29',
+                            backgroundColor: 'rgba(229, 188, 41, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            },
+                            grid: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            },
+                            grid: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Impact Chart
+            const impactCtx = document.getElementById('impactChart').getContext('2d');
+            const impactChart = new Chart(impactCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Decision Speed', 'Innovation Rate', 'Employee Satisfaction', 'Customer Satisfaction', 'Revenue Growth'],
+                    datasets: [{
+                        label: 'Improvement %',
+                        data: [35, 28, 42, 31, 27],
+                        backgroundColor: [
+                            'rgba(255, 209, 46, 0.7)',
+                            'rgba(229, 188, 41, 0.7)',
+                            'rgba(204, 167, 36, 0.7)',
+                            'rgba(178, 146, 31, 0.7)',
+                            'rgba(153, 125, 26, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 209, 46, 1)',
+                            'rgba(229, 188, 41, 1)',
+                            'rgba(204, 167, 36, 1)',
+                            'rgba(178, 146, 31, 1)',
+                            'rgba(153, 125, 26, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                            labels: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            },
+                            grid: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            },
+                            grid: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Language Chart
+            const languageCtx = document.getElementById('languageChart').getContext('2d');
+            const languageChart = new Chart(languageCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Python', 'JavaScript', 'Java', 'C#', 'PHP', 'Others'],
+                    datasets: [{
+                        data: [32, 28, 15, 10, 8, 7],
+                        backgroundColor: [
+                            'rgba(255, 209, 46, 0.7)',
+                            'rgba(229, 188, 41, 0.7)',
+                            'rgba(204, 167, 36, 0.7)',
+                            'rgba(178, 146, 31, 0.7)',
+                            'rgba(153, 125, 26, 0.7)',
+                            'rgba(128, 104, 21, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 209, 46, 1)',
+                            'rgba(229, 188, 41, 1)',
+                            'rgba(204, 167, 36, 1)',
+                            'rgba(178, 146, 31, 1)',
+                            'rgba(153, 125, 26, 1)',
+                            'rgba(128, 104, 21, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Cloud Chart
+            const cloudCtx = document.getElementById('cloudChart').getContext('2d');
+            const cloudChart = new Chart(cloudCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['AWS', 'Azure', 'Google Cloud', 'IBM Cloud', 'Oracle'],
+                    datasets: [{
+                        label: 'Market Share %',
+                        data: [33, 22, 11, 5, 3],
+                        backgroundColor: 'rgba(255, 209, 46, 0.7)',
+                        borderColor: 'rgba(255, 209, 46, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                            labels: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            },
+                            grid: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            },
+                            grid: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Trends Chart
+            const trendsCtx = document.getElementById('trendsChart').getContext('2d');
+            const trendsChart = new Chart(trendsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2018', '2019', '2020', '2021', '2022', '2023'],
+                    datasets: [
+                        {
+                            label: 'AI/ML Adoption',
+                            data: [15, 22, 35, 48, 62, 76],
+                            borderColor: '#FFD12E',
+                            backgroundColor: 'rgba(255, 209, 46, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Cloud Native',
+                            data: [25, 34, 42, 53, 61, 68],
+                            borderColor: '#997D1A',
+                            backgroundColor: 'rgba(153, 125, 26, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'DevOps Practices',
+                            data: [38, 45, 52, 58, 64, 69],
+                            borderColor: '#E5BC29',
+                            backgroundColor: 'rgba(229, 188, 41, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            },
+                            grid: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#333'
+                            },
+                            grid: {
+                                color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Update charts when dark mode changes
+            toggle.addEventListener('change', function() {
+                const isDark = this.checked;
+                
+                // Update all charts
+                [trendChart, impactChart, languageChart, cloudChart, trendsChart].forEach(chart => {
+                    chart.options.plugins.legend.labels.color = isDark ? '#fff' : '#333';
+                    chart.options.scales.x.ticks.color = isDark ? '#fff' : '#333';
+                    chart.options.scales.y.ticks.color = isDark ? '#fff' : '#333';
+                    chart.options.scales.x.grid.color = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                    chart.options.scales.y.grid.color = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                    chart.update();
+                });
+            });
+        });
+    </script>
+</body>
 </html>
